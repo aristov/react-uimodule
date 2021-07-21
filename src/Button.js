@@ -6,6 +6,8 @@ export class Button extends React.Component
 {
   state = { active : false }
 
+  _button = React.createRef()
+
   render() {
     return (
       <div
@@ -17,6 +19,9 @@ export class Button extends React.Component
         onMouseDown={ this.onMouseDown }
         onMouseLeave={ this.onMouseLeave }
         onMouseUp={ this.onMouseUp }
+        onKeyDown={ this.onKeyDown }
+        onKeyUp={ this.onKeyUp }
+        ref={ this._button }
       >
         <Control>
           { this.props.children }
@@ -26,10 +31,9 @@ export class Button extends React.Component
   }
 
   onMouseDown = () => {
-    if(this.props.disabled) {
-      return
+    if(!this.props.disabled) {
+      this.setState({ active : true })
     }
-    this.setState({ active : true })
   }
 
   onMouseLeave = () => {
@@ -42,5 +46,29 @@ export class Button extends React.Component
     if(this.state.active) {
       this.setState({ active : false })
     }
+  }
+
+  onKeyDown = e => {
+    const handler = this['onKeyDown_' + e.code]
+    if(typeof handler === 'function') {
+      handler.call(this, e)
+    }
+  }
+
+  onKeyUp = e => {
+    const handler = this['onKeyUp_' + e.code]
+    if(typeof handler === 'function') {
+      handler.call(this, e)
+    }
+  }
+
+  onKeyDown_Space(e) {
+    e.preventDefault()
+    this.setState({ active : true })
+  }
+
+  onKeyUp_Space() {
+    this.setState({ active : false })
+    this._button.current.click()
   }
 }
