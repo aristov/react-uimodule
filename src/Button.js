@@ -4,7 +4,10 @@ import './Button.css'
 
 export class Button extends React.Component
 {
-  state = { active : false }
+  state = {
+    active : false,
+    pressed : this.props.defaultPressed,
+  }
 
   _button = React.createRef()
 
@@ -13,9 +16,10 @@ export class Button extends React.Component
       <div
         role="button"
         className={ ['Button Widget', this.state.active && 'active'].filter(Boolean).join(' ') }
-        aria-pressed={ this.props.pressed }
+        aria-pressed={ this.props.pressed ?? this.state.pressed }
         aria-disabled={ this.props.disabled }
         tabIndex={ this.props.disabled? null : 0 }
+        onClick={ this.onClick }
         onMouseDown={ this.onMouseDown }
         onMouseLeave={ this.onMouseLeave }
         onMouseUp={ this.onMouseUp }
@@ -30,6 +34,21 @@ export class Button extends React.Component
     )
   }
 
+  activate() {
+    if(this.state.pressed !== undefined) {
+      this.setState(state => ({ pressed : !state.pressed }))
+    }
+  }
+
+  onClick = e => {
+    this.props.onClick?.(e)
+    if(this.props.disabled) {
+      e.preventDefault()
+      e.nativeEvent.stopImmediatePropagation()
+    }
+    e.defaultPrevented || this.activate()
+  }
+
   onMouseDown = () => {
     if(!this.props.disabled) {
       this.setState({ active : true })
@@ -37,13 +56,13 @@ export class Button extends React.Component
   }
 
   onMouseLeave = () => {
-    if(this.state.active) {
+    if(!this.props.disabled && this.state.active) {
       this.setState({ active : false })
     }
   }
 
   onMouseUp = () => {
-    if(this.state.active) {
+    if(!this.props.disabled && this.state.active) {
       this.setState({ active : false })
     }
   }
