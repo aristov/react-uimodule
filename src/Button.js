@@ -19,6 +19,7 @@ export class Button extends React.Component
         aria-pressed={ this.props.pressed ?? this.state.pressed }
         aria-disabled={ this.props.disabled }
         tabIndex={ this.props.disabled? null : 0 }
+        onBlur={ this.onBlur }
         onClick={ this.onClick }
         onMouseDown={ this.onMouseDown }
         onMouseLeave={ this.onMouseLeave }
@@ -38,6 +39,10 @@ export class Button extends React.Component
     if(this.state.pressed !== undefined) {
       this.setState(state => ({ pressed : !state.pressed }))
     }
+  }
+
+  onBlur = () => {
+    this.state.active && this.setState({ active : false })
   }
 
   onClick = e => {
