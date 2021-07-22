@@ -55,8 +55,3 @@
   --block-padding: 14px;
   --doc-padding: 10px;
 }
-
-[aria-hidden=true]
-{
-  display: none;
-}

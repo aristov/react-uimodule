@@ -9,7 +9,7 @@ export class Button extends React.Component
     pressed : this.props.defaultPressed,
   }
 
-  _button = React.createRef()
+  _ref = React.createRef()
 
   render() {
     return (
@@ -26,7 +26,7 @@ export class Button extends React.Component
         onMouseUp={ this.onMouseUp }
         onKeyDown={ this.onKeyDown }
         onKeyUp={ this.onKeyUp }
-        ref={ this._button }
+        ref={ this._ref }
       >
         <Control>
           { this.props.children }
@@ -93,6 +93,6 @@ export class Button extends React.Component
 
   onKeyUp_Space() {
     this.setState({ active : false })
-    this._button.current.click()
+    this._ref.current.click()
   }
 }

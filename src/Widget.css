@@ -19,7 +19,8 @@
 {
   color: var(--disabled-color);
 }
-.Widget[aria-disabled=true] > .Control
+.Widget[aria-disabled=true] > .Control,
+.Widget[aria-disabled=true]:hover > .Control
 {
   cursor: var(--disabled-cursor);
   background-color: var(--disabled-bg-color);
