@@ -27,11 +27,12 @@ export class ListBox extends Component
         <Control>{
           this.props.options.map(option => {
             return (
-              <Option key={ option.value || option.text } { ...option }
+              <Option key={ option.value || option.text }
+                      value={ option.value || option.text }
                       selected={ option.value === this.state.value }
                       disabled={ this.props.disabled }
                       updateValue={ this.updateValue }
-              />
+              >{ option.text }</Option>
             )
           })
         }</Control>

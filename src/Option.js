@@ -19,7 +19,7 @@ export class Option extends Component
         onMouseLeave={ this.onMouseLeave }
         onMouseUp={ this.onMouseUp }
       >
-        { this.props.text || this.props.children }
+        { this.props.children }
       </div>
     )
   }
