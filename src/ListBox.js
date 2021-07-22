@@ -1,10 +1,10 @@
-import { Component } from 'react'
+import React from 'react'
 import { Control } from './Control'
 import { Option } from './Option'
 import { Label } from './Label'
 import './ListBox.css'
 
-export class ListBox extends Component
+export class ListBox extends React.Component
 {
   state = {
     active : false,

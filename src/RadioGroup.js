@@ -1,9 +1,9 @@
-import { Component } from 'react'
+import React from 'react'
 import { Radio } from './Radio'
 import { Label } from './Label'
 import './RadioGroup.css'
 
-export class RadioGroup extends Component
+export class RadioGroup extends React.Component
 {
   state = {
     active : false,

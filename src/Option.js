@@ -1,7 +1,7 @@
-import { Component } from 'react'
+import React from 'react'
 import './Option.css'
 
-export class Option extends Component
+export class Option extends React.Component
 {
   state = {
     active : false,
