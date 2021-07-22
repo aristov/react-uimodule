@@ -2,6 +2,7 @@ import React from 'react'
 import { Test } from './Test'
 import { Button } from './Button'
 import './Showcase.css'
+import { ListBox } from './ListBox'
 
 class Showcase extends React.Component
 {
@@ -25,9 +26,31 @@ class Showcase extends React.Component
           </Button>
           <Button disabled={ true }>Disabled</Button>
         </Test>
+        <Test>
+          <ListBox options={ options.map(text => ({ text, value : text })) }/>
+          <ListBox options={ options.map(text => ({ text, value : text })) }
+                   defaultValue={ options[2] }
+          />
+          <ListBox options={ options.map(text => ({ text, value : text })) }
+                   disabled
+          />
+        </Test>
+        <Test>
+
+        </Test>
       </div>
     )
   }
 }
+
+const options = [
+  'Rehearsal',
+  'Lesson',
+  'Practice',
+  'Master class',
+  'Concert',
+  'Party',
+  'Parking',
+]
 
 export { Showcase }
