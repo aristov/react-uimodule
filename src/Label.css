@@ -1,0 +1,9 @@
+.Label
+{
+  display: block;
+  color: var(--dim-color);
+  font-size: .8rem;
+  margin: 0 0 2px 0;
+  cursor: default;
+  user-select: none;
+}

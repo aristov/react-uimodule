@@ -21,6 +21,14 @@
   border-color: var(--focus-border-color);
   box-shadow: var(--focus-box-shadow);
 }
+.ListBox.active .Option[aria-selected=true]
+{
+  background-color: var(--checked-active-bg-color);
+}
+.ListBox[aria-readonly=true] .Option
+{
+  cursor: default;
+}
 .ListBox[aria-disabled=true] .Option[aria-selected=true]:not([aria-checked])
 {
   background: var(--checked-disabled-bg-color);
@@ -29,11 +37,7 @@
 {
   opacity: .4;
 }
-.ListBox.active .Option[aria-selected=true]
+.ListBox[aria-disabled=true] > .Label
 {
-  background-color: var(--checked-active-bg-color);
-}
-.ListBox[aria-readonly=true] .Option
-{
-  cursor: default;
+  opacity: .5;
 }

@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import { Control } from './Control'
 import { Option } from './Option'
+import { Label } from './Label'
 import './ListBox.css'
 
 export class ListBox extends Component
@@ -18,13 +19,17 @@ export class ListBox extends Component
            onKeyDown={ this.onKeyDown }
            onKeyUp={ this.onKeyUp }
       >
+        {
+          this.props.label && <Label>{ this.props.label }</Label>
+        }
         <Control>{
           this.props.options.map(option => {
             return (
               <Option key={ option.value || option.text } { ...option }
                       selected={ option.value === this.state.value }
                       disabled={ this.props.disabled }
-                      updateValue={ this.updateValue }/>
+                      updateValue={ this.updateValue }
+              />
             )
           })
         }</Control>
