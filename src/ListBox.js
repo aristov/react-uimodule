@@ -8,16 +8,18 @@ export class ListBox extends Component
 {
   state = {
     active : false,
-    value : this.props.defaultValue
+    value : this.props.defaultValue,
   }
 
   render() {
     return (
-      <div className={ ['ListBox Widget', this.state.active && 'active'].filter(Boolean).join(' ') }
-           tabIndex={ this.props.disabled? null : 0 }
-           aria-disabled={ this.props.disabled }
-           onKeyDown={ this.onKeyDown }
-           onKeyUp={ this.onKeyUp }
+      <div
+        role="listbox"
+        className={ ['ListBox Widget', this.state.active && 'active'].filter(Boolean).join(' ') }
+        tabIndex={ this.props.disabled? null : 0 }
+        aria-disabled={ this.props.disabled }
+        onKeyDown={ this.onKeyDown }
+        onKeyUp={ this.onKeyUp }
       >
         {
           this.props.label && <Label>{ this.props.label }</Label>
