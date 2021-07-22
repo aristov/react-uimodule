@@ -10,7 +10,7 @@
   padding-left: 0;
   margin-left: 0;
 }
-.Radio .Label
+.Radio > .Label
 {
   display: inline-block;
   vertical-align: middle;
@@ -59,10 +59,9 @@
   background-color: var(--checked-active-bg-color);
 }
 .Radio[aria-disabled=true],
-.Radio[aria-disabled=true] .Label
+.Radio[aria-disabled=true] > .Label
 {
   cursor: var(--disabled-cursor);
-  color: var(--disabled-color);
 }
 .Radio[aria-disabled=true] > .Control
 {

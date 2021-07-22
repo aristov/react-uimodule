@@ -39,7 +39,3 @@
 {
   opacity: .4;
 }
-.ListBox[aria-disabled=true] > .Label
-{
-  opacity: .5;
-}

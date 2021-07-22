@@ -71,10 +71,9 @@
 {
   cursor: var(--disabled-cursor);
 }
-.CheckBox[aria-disabled=true] .Label
+.CheckBox[aria-disabled=true] > .Label
 {
   cursor: var(--disabled-cursor);
-  color: var(--disabled-color);
 }
 .CheckBox[aria-checked=true][aria-disabled=true] > .Control
 {

@@ -34,3 +34,8 @@
 {
   border-color: var(--invalid-color);
 }
+.Widget[aria-disabled=true] > .Label
+{
+  color: var(--disabled-color);
+  opacity: .5;
+}
