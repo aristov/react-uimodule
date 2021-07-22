@@ -1,0 +1,75 @@
+@import 'icons/css/fontawesome-fonts.css';
+@import 'Widget.css';
+
+.Radio
+{
+  white-space: nowrap;
+  cursor: pointer;
+  padding: var(--control-padding);
+  padding-right: calc(var(--control-padding-h) * 2);
+  padding-left: 0;
+  margin-left: 0;
+}
+.Radio .Label
+{
+  display: inline-block;
+  vertical-align: middle;
+  margin: var(--checkbox-label-margin);
+  cursor: pointer;
+}
+.Radio > .Control
+{
+  color: #fff;
+  width: auto;
+  padding: 10px;
+  border-width: 2px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.Radio > .Control::before
+{
+  font-family: 'fontawesome';
+  font-size: .6em;
+  position: absolute;
+}
+.Radio[aria-checked=true] > .Control
+{
+  border-color: transparent;
+}
+.Radio[aria-checked=true] > .Control::before
+{
+  content: '\f111';
+}
+.Radio:hover > .Control
+{
+  border-color: var(--hover-border-color);
+}
+.Radio.active > .Control
+{
+  background-color: var(--active-bg-color);
+}
+.Radio[aria-checked=true] > .Control
+{
+  background-color: var(--checked-bg-color);
+}
+.Radio[aria-checked=true].active > .Control
+{
+  background-color: var(--checked-active-bg-color);
+}
+.Radio[aria-disabled=true],
+.Radio[aria-disabled=true] .Label
+{
+  cursor: var(--disabled-cursor);
+  color: var(--disabled-color);
+}
+.Radio[aria-disabled=true] > .Control
+{
+  background-color: var(--disabled-bg-color);
+  border-color: var(--disabled-border-color);
+}
+.Radio[aria-checked=true][aria-disabled=true] > .Control
+{
+  background-color: var(--checked-disabled-bg-color);
+}
