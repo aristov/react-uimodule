@@ -1,0 +1,6 @@
+.Heading
+{
+  font-size: 1.2rem;
+  margin: 20px var(--widget-margin);
+  color: rgba(0, 0, 0, 0.7);
+}
