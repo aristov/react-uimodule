@@ -1,6 +1,7 @@
 import React from 'react'
 import { Test } from './Test'
 import { Button } from './Button'
+import { CheckBox } from './CheckBox'
 import { ListBox } from './ListBox'
 import './Showcase.css'
 
@@ -27,19 +28,16 @@ class Showcase extends React.Component
           <Button disabled={ true }>Disabled</Button>
         </Test>
         <Test>
-          <ListBox label="Simple"
-                   options={ options.map(text => ({ text, value : text })) }/>
-          <ListBox label="Selected"
-                   options={ options.map(text => ({ text, value : text })) }
-                   defaultValue={ options[2] }
-          />
-          <ListBox label="Disabled"
-                   options={ options.map(text => ({ text, value : text })) }
-                   disabled
-          />
+          <CheckBox>Simple</CheckBox>
+          <CheckBox checked>Checked</CheckBox>
+          <CheckBox defaultChecked>DefaultChecked</CheckBox>
+          <CheckBox defaultChecked="mixed">Mixed</CheckBox>
+          <CheckBox disabled>Disabled</CheckBox>
         </Test>
         <Test>
-
+          <ListBox label="Simple" options={ options }/>
+          <ListBox label="Selected" options={ options } defaultValue={ options[2] }/>
+          <ListBox label="Disabled" options={ options } disabled/>
         </Test>
       </div>
     )
@@ -55,5 +53,6 @@ const options = [
   'Party',
   'Parking',
 ]
+.map(text => ({ text, value : text }))
 
 export { Showcase }

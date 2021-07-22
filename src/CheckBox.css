@@ -1,0 +1,86 @@
+@import 'icons/css/fontawesome-fonts.css';
+@import 'Widget.css';
+
+.CheckBox
+{
+  white-space: nowrap;
+  cursor: pointer;
+  padding: var(--control-padding);
+  padding-left: 0;
+}
+.CheckBox .Label
+{
+  display: inline-block;
+  vertical-align: middle;
+  margin: var(--checkbox-label-margin);
+  cursor: pointer;
+}
+.CheckBox > .Control
+{
+  color: #fff;
+  width: auto;
+  padding: 9px;
+  margin: 1px;
+  border-width: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.CheckBox > .Control::before
+{
+  font-family: 'fontawesome';
+  position: absolute;
+}
+.CheckBox:hover > .Control
+{
+  border-color: var(--hover-border-color);
+}
+.CheckBox[aria-checked=true] > .Control,
+.CheckBox[aria-checked=mixed] > .Control
+{
+  border-color: transparent;
+}
+.CheckBox[aria-checked=true] > .Control::before
+{
+  content: '\e801';
+}
+.CheckBox[aria-checked=mixed] > .Control::before
+{
+  font-size: 1.1em;
+  content: '\e803';
+}
+.CheckBox.active > .Control
+{
+  background: var(--active-bg-color);
+}
+.CheckBox[aria-checked=true] > .Control,
+.CheckBox[aria-checked=mixed] > .Control
+{
+  background-color: var(--checked-bg-color);
+}
+.CheckBox[aria-checked=true].active > .Control,
+.CheckBox[aria-checked=mixed].active > .Control
+{
+  background-color: var(--checked-active-bg-color);
+}
+.CheckBox[aria-readonly=true]
+{
+  opacity: var(--readonly-opacity);
+}
+.CheckBox[aria-disabled=true]
+{
+  cursor: var(--disabled-cursor);
+}
+.CheckBox[aria-disabled=true] .Label
+{
+  cursor: var(--disabled-cursor);
+  color: var(--disabled-color);
+}
+.CheckBox[aria-checked=true][aria-disabled=true] > .Control
+{
+  background-color: var(--checked-disabled-bg-color);
+}
+.CheckBox:focus-visible > .Control
+{
+  border-color: var(--focus-border-color);
+}
