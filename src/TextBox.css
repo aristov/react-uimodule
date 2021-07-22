@@ -1,0 +1,76 @@
+@import 'Widget.css';
+
+.TextBox
+{
+  width: var(--textbox-width);
+}
+.TextBox > .Control
+{
+  width: 100%;
+  cursor: text;
+}
+.TextBox .Edit
+{
+  overflow: hidden;
+  white-space: nowrap;
+  outline: none;
+  min-height: 1rem;
+  user-select: auto;
+}
+.TextBox .Placeholder
+{
+  position: absolute;
+  color: var(--dim-color);
+  display: none;
+}
+.TextBox .ClearButton
+{
+  position: absolute;
+  height: 100%;
+  top: 0;
+  right: 0;
+  width: 27px;
+}
+.TextBox[aria-multiline] .Edit
+{
+  min-height: 32px;
+  max-height: none;
+  white-space: normal;
+}
+.TextBox.blank .Edit::before
+{
+  content: '\00A0';
+}
+.TextBox.blank .Placeholder
+{
+  display: inline-block;
+}
+.TextBox.blank .ClearButton
+{
+  display: none;
+}
+.TextBox:focus-within > .Control
+{
+  border-color: var(--focus-border-color);
+  box-shadow: var(--focus-box-shadow);
+}
+.TextBox[aria-disabled=true] .ClearButton
+{
+  cursor: default;
+  opacity: .2;
+}
+.TextBox[aria-disabled=true] .Placeholder
+{
+  color: var(--disabled-color);
+  opacity: .5;
+}
+.TextBox[aria-readonly=true] > .Control
+{
+  opacity: var(--readonly-opacity);
+  cursor: default;
+  padding-right: var(--control-padding-h);
+}
+.TextBox[aria-readonly=true] .ClearButton
+{
+  display: none;
+}

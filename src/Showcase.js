@@ -5,6 +5,7 @@ import { Button } from './Button'
 import { CheckBox } from './CheckBox'
 import { RadioGroup } from './RadioGroup'
 import { ListBox } from './ListBox'
+import { TextBox } from './TextBox'
 import './Showcase.css'
 
 class Showcase extends React.Component
@@ -12,11 +13,23 @@ class Showcase extends React.Component
   state = {
     isPressed : true,
     isChecked : true,
+    textValue : 'Hello world!',
   }
 
   render() {
     return (
       <div className="Showcase">
+        <Test>
+          <Heading>TextBox</Heading>
+          <TextBox label="Simple"/>
+          <TextBox
+            label="Value"
+            value={ this.state.textValue }
+            onChange={ e => this.setState({ textValue : e.target.value }) }
+          />
+          <TextBox label="DefaultValue" defaultValue="Hello world!"/>
+          <TextBox label="Disabled" disabled/>
+        </Test>
         <Test>
           <Heading>Button</Heading>
           <Button>Simple</Button>
