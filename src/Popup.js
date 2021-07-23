@@ -44,41 +44,31 @@ export class Popup extends React.Component
     if(props.hidden && state.hidden) {
       return null
     }
-    let hidden
-    if(props.hidden === false && state.hidden === true) {
-      hidden = false
-    }
-    if(props.hidden === false && state.hidden === false) {
-      hidden = null
-    }
-    if(props.hidden === true && state.hidden === false) {
-      hidden = true
-    }
     return (
       <div
         className="Popup"
-        aria-hidden={ hidden }
+        aria-hidden={ !props.hidden && !state.hidden? null : props.hidden }
         ref={ this._ref }
       >
-        { this.props.children }
+        { props.children }
       </div>
     )
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { props, state } = this
-    if(props.hidden === true && state.hidden === true) {
+    if(props.hidden && state.hidden) {
       return
     }
-    if(props.hidden === false && state.hidden === true) {
+    if(!props.hidden && state.hidden) {
       document.addEventListener('click', this.onDocClick)
       setTimeout(() => this.setState({ hidden : false }))
       return
     }
-    if(props.hidden === false && state.hidden === false) {
+    if(!props.hidden && !state.hidden) {
       return
     }
-    if(props.hidden === true && state.hidden === false) {
+    if(props.hidden && !state.hidden) {
       document.removeEventListener('click', this.onDocClick)
       this._ref.current.ontransitionend = () => {
         this._ref.current.ontransitionend = null
