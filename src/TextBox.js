@@ -16,7 +16,9 @@ export class TextBox extends React.Component
     return (
       <div
         className="TextBox Widget"
+        tabIndex={ this.props.disabled? null : -1 }
         aria-disabled={ this.props.disabled }
+        onFocus={ this.onFocus }
         ref={ this._ref }
       >
         { this.props.label && <Label>{ this.props.label }</Label> }
@@ -58,6 +60,10 @@ export class TextBox extends React.Component
 
   componentWillUnmount() {
     this._ref.current.removeEventListener('change', this.onChange)
+  }
+
+  onFocus = () => {
+    this._edit.current.focus()
   }
 
   onInput = e => {
