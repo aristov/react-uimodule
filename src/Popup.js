@@ -63,16 +63,18 @@ export class Popup extends React.Component
   }
 
   show() {
-    document.addEventListener('click', this.onDocClick)
     setTimeout(() => this.setState({ hidden : false }))
+    document.addEventListener('click', this.onDocClick)
   }
 
   close() {
-    document.removeEventListener('click', this.onDocClick)
-    this._ref.current.ontransitionend = () => {
-      this._ref.current.ontransitionend = null
+    const handler = this.node.ontransitionend = () => {
+      clearTimeout(timeoutId)
+      this.node.ontransitionend = null
       this.setState({ hidden : true })
     }
+    const timeoutId = setTimeout(handler, Math.max(...this.durations))
+    document.removeEventListener('click', this.onDocClick)
   }
 
   componentWillUnmount() {
@@ -80,15 +82,31 @@ export class Popup extends React.Component
   }
 
   onDocClick = e => {
-    if(this.props.hidden) {
+    if(this.props.hidden && this.state.hidden) {
       return
     }
-    if(this._ref.current.contains(e.target)) {
+    if(this.node.contains(e.target)) {
       return
     }
-    if(this.props.anchor._ref.current.contains(e.target)) {
+    if(this.props.anchor?.node.contains(e.target)) {
       return
     }
     this.props.onClickOutside?.(e)
+  }
+
+  /**
+   * @returns {number[]}
+   */
+  get durations() {
+    if(this.props.hidden && this.state.hidden) {
+      return [0]
+    }
+    const style = getComputedStyle(this.node)
+    const durations = style.transitionDuration.split(', ')
+    return durations.map(duration => parseFloat(duration) * 1000)
+  }
+
+  get node() {
+    return this._ref.current
   }
 }
