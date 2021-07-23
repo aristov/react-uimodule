@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
+import { Example } from './Example'
 import { Heading } from './Heading'
 import { ListBox } from './ListBox'
-import { Test } from './Test'
 
 const options = [
   'Rehearsal',
@@ -17,7 +17,7 @@ const options = [
 export default function ListBoxExample() {
   const [value, setValue] = useState(options[2].value)
   return (
-    <Test>
+    <Example>
       <Heading>ListBox</Heading>
       <ListBox label="Not selected" options={ options }/>
       <ListBox label="Controlled"
@@ -26,6 +26,6 @@ export default function ListBoxExample() {
                onChange={ value => setValue(value) }/>
       <ListBox label="Uncontrolled" options={ options } defaultValue={ options[2].value }/>
       <ListBox label="Disabled" options={ options } disabled/>
-    </Test>
+    </Example>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Test } from './Test'
+import { Example } from './Example'
 import { Heading } from './Heading'
 import { RadioGroup } from './RadioGroup'
 
@@ -13,7 +13,7 @@ const radios = [
 export default function ButtonExample() {
   const [value, setValue] = useState(radios[1].value)
   return (
-    <Test>
+    <Example>
       <Heading>RadioGroup</Heading>
       <RadioGroup label="Not checked" radios={ radios }/>
       <RadioGroup
@@ -24,6 +24,6 @@ export default function ButtonExample() {
       />
       <RadioGroup label="Uncontrolled" radios={ radios } defaultValue={ radios[1].value }/>
       <RadioGroup label="Disabled" radios={ radios } disabled/>
-    </Test>
+    </Example>
   )
 }

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Test } from './Test'
+import { Example } from './Example'
 import { Heading } from './Heading'
 import { TextBox } from './TextBox'
 
 export default function ButtonExample() {
   const [value, setValue] = useState('Hello React!')
   return (
-    <Test>
+    <Example>
       <Heading>TextBox</Heading>
       <TextBox label="Empty"/>
       <TextBox
@@ -16,6 +16,6 @@ export default function ButtonExample() {
       />
       <TextBox label="Uncontrolled" defaultValue="Hello React!"/>
       <TextBox label="Disabled" disabled/>
-    </Test>
+    </Example>
   )
 }

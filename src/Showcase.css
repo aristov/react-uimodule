@@ -1,9 +1,9 @@
-.Showcase .Test
+.Showcase .Example
 {
   padding: 30px 10px;
   border-bottom: 5px solid #eee;
 }
-.Showcase .Test:last-child
+.Showcase .Example:last-child
 {
   border-bottom: none;
 }
