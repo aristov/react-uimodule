@@ -74,6 +74,9 @@ export class Popup extends React.Component
       this.setState({ hidden : true })
     }
     const timeoutId = setTimeout(handler, Math.max(...this.durations))
+    if(this.node.contains(document.activeElement)) {
+      this.props.anchor?.node.focus()
+    }
     document.removeEventListener('click', this.onDocClick)
   }
 
