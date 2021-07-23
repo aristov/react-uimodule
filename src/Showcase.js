@@ -9,6 +9,24 @@ import { TextBox } from './TextBox'
 import { Popup } from './Popup'
 import './Showcase.css'
 
+const radios = [
+  'Rehearsal',
+  'Lesson',
+  'Practice',
+]
+.map(text => ({ text, value : text }))
+
+const options = [
+  'Rehearsal',
+  'Lesson',
+  'Practice',
+  'Master class',
+  'Concert',
+  'Party',
+  'Parking',
+]
+.map(text => ({ text, value : text }))
+
 class Showcase extends React.Component
 {
   _popupButton = React.createRef()
@@ -17,6 +35,7 @@ class Showcase extends React.Component
     isPressed : true,
     isChecked : true,
     textValue : 'Hello world!',
+    radioValue : radios[1].value,
     popupHidden : true,
   }
 
@@ -76,7 +95,13 @@ class Showcase extends React.Component
         <Test>
           <Heading>RadioGroup</Heading>
           <RadioGroup label="Simple" radios={ radios }/>
-          <RadioGroup label="Checked" radios={ radios } defaultValue={ radios[1].value }/>
+          <RadioGroup
+            label="Controlled"
+            radios={ radios }
+            value={ this.state.radioValue }
+            onChange={ value => this.setState({ radioValue : value }) }
+          />
+          <RadioGroup label="Uncontrolled" radios={ radios } defaultValue={ radios[1].value }/>
           <RadioGroup label="Disabled" radios={ radios } disabled/>
         </Test>
         <Test>
@@ -89,23 +114,5 @@ class Showcase extends React.Component
     )
   }
 }
-
-const radios = [
-  'Rehearsal',
-  'Lesson',
-  'Practice',
-]
-.map(text => ({ text, value : text }))
-
-const options = [
-  'Rehearsal',
-  'Lesson',
-  'Practice',
-  'Master class',
-  'Concert',
-  'Party',
-  'Parking',
-]
-.map(text => ({ text, value : text }))
 
 export { Showcase }

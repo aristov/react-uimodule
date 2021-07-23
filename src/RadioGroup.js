@@ -11,7 +11,7 @@ export class RadioGroup extends React.Component
   }
 
   render() {
-    const value = this.state.value
+    const value = this.props.value ?? this.state.value
     return (
       <div
         role="radiogroup"
@@ -46,6 +46,7 @@ export class RadioGroup extends React.Component
       return
     }
     this.setState({ value })
+    this.props.onChange?.(value)
   }
 
   moveFocus(offset) {
@@ -56,7 +57,7 @@ export class RadioGroup extends React.Component
       index += radios.findIndex(radio => radio.value === value)
     }
     index %= radios.length
-    this.setState({ value : radios[index].value })
+    this.updateValue(radios[index].value)
   }
 
   onKeyDown = e => {
