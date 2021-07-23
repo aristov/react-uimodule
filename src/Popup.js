@@ -26,6 +26,9 @@ export class Popup extends React.Component
   }
 
   onDocClick = e => {
+    if(this.props.hidden) {
+      return
+    }
     if(this._ref.current.contains(e.target)) {
       return
     }
