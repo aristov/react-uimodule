@@ -3,6 +3,12 @@ import './Heading.css'
 
 export function Heading(props) {
   return (
-    <div className="Heading">{ props.children }</div>
+    <div
+      role="heading"
+      className="Heading"
+      aria-level={ props.level || 1 }
+    >
+      { props.children }
+    </div>
   )
 }
