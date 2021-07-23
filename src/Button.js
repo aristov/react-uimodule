@@ -95,4 +95,8 @@ export class Button extends React.Component
     this.setState({ active : false })
     this._ref.current.click()
   }
+
+  get node() {
+    return this._ref.current
+  }
 }
