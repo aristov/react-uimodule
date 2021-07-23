@@ -15,16 +15,12 @@
   outline: none;
   z-index: 100;
 }
-.Popup[hidden]
-{
-  display: none;
-}
-.Popup[hidden=false]
+.Popup[aria-hidden=false]
 {
   opacity: 0;
   transform: translateY(1em);
 }
-.Popup[hidden=true]
+.Popup[aria-hidden=true]
 {
   opacity: 0;
 }
