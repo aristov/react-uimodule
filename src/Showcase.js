@@ -60,13 +60,13 @@ class Showcase extends React.Component
         </Test>
         <Test>
           <Heading>TextBox</Heading>
-          <TextBox label="Simple"/>
+          <TextBox label="Empty"/>
           <TextBox
-            label="Value"
+            label="Controlled"
             value={ this.state.textValue }
             onChange={ e => this.setState({ textValue : e.target.value }) }
           />
-          <TextBox label="DefaultValue" defaultValue="Hello world!"/>
+          <TextBox label="Uncontrolled" defaultValue="Hello world!"/>
           <TextBox label="Disabled" disabled/>
         </Test>
         <Test>
@@ -75,26 +75,24 @@ class Showcase extends React.Component
           <Button
             pressed={ this.state.isPressed }
             onClick={ () => this.setState(state => ({ isPressed : !state.isPressed })) }
-          >Pressed</Button>
-          <Button defaultPressed={ true }>
-            DefaultPressed
-          </Button>
+          >Pressed (controlled)</Button>
+          <Button defaultPressed={ true }>Pressed (uncontrolled)</Button>
           <Button disabled={ true }>Disabled</Button>
         </Test>
         <Test>
           <Heading>CheckBox</Heading>
-          <CheckBox>Simple</CheckBox>
+          <CheckBox>Not checked</CheckBox>
           <CheckBox
             checked={ this.state.isChecked }
             onClick={ () => this.setState(state => ({ isChecked : !state.isChecked })) }
-          >Checked</CheckBox>
-          <CheckBox defaultChecked>DefaultChecked</CheckBox>
+          >Controlled</CheckBox>
+          <CheckBox defaultChecked>Uncontrolled</CheckBox>
           <CheckBox defaultChecked="mixed">Mixed</CheckBox>
           <CheckBox disabled>Disabled</CheckBox>
         </Test>
         <Test>
           <Heading>RadioGroup</Heading>
-          <RadioGroup label="Simple" radios={ radios }/>
+          <RadioGroup label="Not checked" radios={ radios }/>
           <RadioGroup
             label="Controlled"
             radios={ radios }
@@ -106,8 +104,8 @@ class Showcase extends React.Component
         </Test>
         <Test>
           <Heading>ListBox</Heading>
-          <ListBox label="Simple" options={ options }/>
-          <ListBox label="Selected" options={ options } defaultValue={ options[2].value }/>
+          <ListBox label="Not selected" options={ options }/>
+          <ListBox label="Uncontrolled" options={ options } defaultValue={ options[2].value }/>
           <ListBox label="Disabled" options={ options } disabled/>
         </Test>
       </div>
