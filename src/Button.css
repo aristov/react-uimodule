@@ -3,6 +3,7 @@
 .Button
 {
   white-space: nowrap;
+  min-width: calc(var(--textbox-width) / 3);
 }
 .Button > .Control
 {
