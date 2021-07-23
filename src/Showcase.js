@@ -6,19 +6,39 @@ import { CheckBox } from './CheckBox'
 import { RadioGroup } from './RadioGroup'
 import { ListBox } from './ListBox'
 import { TextBox } from './TextBox'
+import { Popup } from './Popup'
 import './Showcase.css'
 
 class Showcase extends React.Component
 {
+  _popupButton = React.createRef()
+
   state = {
     isPressed : true,
     isChecked : true,
     textValue : 'Hello world!',
+    popupHidden : true,
   }
 
   render() {
     return (
       <div className="Showcase">
+        <Test>
+          <Heading>Popup</Heading>
+          <Button
+            onClick={ () => this.setState(state => ({ popupHidden : !state.popupHidden })) }
+            ref={ this._popupButton }
+          >
+            Popup
+          </Button>
+          <Popup
+            hidden={ this.state.popupHidden }
+            anchor={ this._popupButton.current }
+            onClickOutside={ () => this.setState({ popupHidden : true }) }
+          >
+            <Button onClick={ () => this.setState({ popupHidden : true }) }>Close the popup</Button>
+          </Popup>
+        </Test>
         <Test>
           <Heading>TextBox</Heading>
           <TextBox label="Simple"/>

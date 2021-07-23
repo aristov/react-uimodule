@@ -1,0 +1,30 @@
+@import 'root.css';
+
+.Popup
+{
+  position: fixed;
+  display: block;
+  margin: var(--widget-margin);
+  padding: 5px;
+  max-width: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
+  transition: opacity .2s, transform .2s, top .2s, left .2s;
+  background: var(--popup-bg-color);
+  box-shadow: var(--popup-box-shadow);
+  outline: none;
+  z-index: 100;
+}
+.Popup[hidden]
+{
+  display: none;
+}
+.Popup[hidden=false]
+{
+  opacity: 0;
+  transform: translateY(1em);
+}
+.Popup[hidden=true]
+{
+  opacity: 0;
+}
