@@ -1,7 +1,7 @@
 import React from 'react'
 import { Control } from './Control'
-import { Option } from './Option'
 import { Label } from './Label'
+import { Option } from './Option'
 import './ListBox.css'
 
 export class ListBox extends React.Component
@@ -12,6 +12,7 @@ export class ListBox extends React.Component
   }
 
   render() {
+    const value = this.props.value ?? this.state.value
     return (
       <div
         role="listbox"
@@ -29,7 +30,7 @@ export class ListBox extends React.Component
             return (
               <Option key={ option.value || option.text }
                       value={ option.value || option.text }
-                      selected={ option.value === this.state.value }
+                      selected={ option.value === value }
                       disabled={ this.props.disabled }
                       updateValue={ this.updateValue }
               >{ option.text }</Option>
@@ -45,6 +46,7 @@ export class ListBox extends React.Component
       return
     }
     this.setState({ value })
+    this.props.onChange?.(value)
   }
 
   onKeyDown = e => {
@@ -67,7 +69,7 @@ export class ListBox extends React.Component
     const options = this.props.options
     const index = options.findIndex(option => option.value === value) - 1
     if(index > -1) {
-      this.setState({ value : options[index].value })
+      this.updateValue(options[index].value)
     }
   }
 
@@ -77,7 +79,7 @@ export class ListBox extends React.Component
     const options = this.props.options
     const index = options.findIndex(option => option.value === value) + 1
     if(index < options.length) {
-      this.setState({ value : options[index].value })
+      this.updateValue(options[index].value)
     }
   }
 
