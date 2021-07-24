@@ -1,4 +1,4 @@
-import React, { useState, useRef, createElement } from 'react'
+import React, { useState, useRef } from 'react'
 import { Example } from './Example'
 import { Heading } from './Heading'
 import { Button } from './Button'
@@ -6,6 +6,7 @@ import { Dialog } from './Dialog'
 import { TextBox } from './TextBox'
 import { DialogHead } from './DialogHead'
 import { DialogBody } from './DialogBody'
+import { CancelButton } from './CancelButton'
 
 function DialogSimpleExample() {
   const button = useRef(null)
@@ -22,6 +23,7 @@ function DialogSimpleExample() {
       >
         <DialogHead>
           <Heading>Hello!</Heading>
+          <CancelButton onClick={ () => setHidden(true) }/>
         </DialogHead>
         <DialogBody>
           <TextBox label="Say something"/>
@@ -48,6 +50,7 @@ function DialogModalExample() {
       >
         <DialogHead>
           <Heading>Hello!</Heading>
+          <CancelButton onClick={ () => setHidden(true) }/>
         </DialogHead>
         <DialogBody>
           <TextBox label="Say something"/>

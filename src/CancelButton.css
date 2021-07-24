@@ -1,0 +1,40 @@
+@import 'icons/css/fontawesome-fonts.css';
+
+.CancelButton
+{
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  opacity: var(--icon-opacity);
+  font-size: 1.1rem;
+  color: rgba(0, 0, 0, .5);
+  min-width: auto;
+}
+.CancelButton > .Control
+{
+  border: none;
+  padding: 5px;
+}
+.CancelButton > .Control::before
+{
+  font-family: 'fontawesome';
+  content: '\e800';
+  margin: 0 .2em;
+}
+.CancelButton.active > .Control
+{
+  background: transparent;
+}
+.CancelButton:hover,
+.CancelButton:focus-visible
+{
+  opacity: var(--icon-hover-opacity);
+  box-shadow: none;
+  border: none;
+  background-color: transparent;
+}
+.CancelButton.active
+{
+  opacity: 1;
+}
