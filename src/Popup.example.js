@@ -10,7 +10,7 @@ function PopupSimpleExample() {
   return (
     <>
       <Button onClick={ () => setHidden(!hidden) } ref={ button }>
-        Popup
+        Open simple popup
       </Button>
       <Popup
         hidden={ hidden }
@@ -29,7 +29,7 @@ function PopupModalExample() {
   return (
     <>
       <Button onClick={ () => setHidden(!hidden) } ref={ modalButton }>
-        Modal popup
+        Open modal popup
       </Button>
       <Popup
         modal

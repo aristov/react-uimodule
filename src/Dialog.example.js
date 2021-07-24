@@ -14,7 +14,7 @@ function DialogSimpleExample() {
   return (
     <>
       <Button onClick={ () => setHidden(!hidden) } ref={ button }>
-        Dialog
+        Open simple dialog
       </Button>
       <Dialog
         hidden={ hidden }
@@ -23,7 +23,7 @@ function DialogSimpleExample() {
       >
         <DialogHead>
           <Heading>Hello!</Heading>
-          <CancelButton onClick={ () => setHidden(true) }/>
+          <CancelButton/>
         </DialogHead>
         <DialogBody>
           <TextBox label="Say something"/>
@@ -40,7 +40,7 @@ function DialogModalExample() {
   return (
     <>
       <Button onClick={ () => setHidden(!hidden) } ref={ modalButton }>
-        Modal Dialog
+        Open modal dialog
       </Button>
       <Dialog
         modal
@@ -50,7 +50,7 @@ function DialogModalExample() {
       >
         <DialogHead>
           <Heading>Hello!</Heading>
-          <CancelButton onClick={ () => setHidden(true) }/>
+          <CancelButton/>
         </DialogHead>
         <DialogBody>
           <TextBox label="Say something"/>

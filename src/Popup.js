@@ -1,9 +1,11 @@
-import debounce from 'lodash/debounce'
 import React from 'react'
+import debounce from 'lodash/debounce'
 import './Popup.css'
 
 const POSITION_UPDATE_DEBOUNCE = 200
 const POSITION_UPDATE_INTERVAL = 1000
+
+export const CancelContext = React.createContext(() => {})
 
 export class Popup extends React.Component
 {
@@ -29,7 +31,11 @@ export class Popup extends React.Component
         onKeyDown={ this.onKeyDown }
         ref={ this._ref }
       >
-        <div className="Inner">{ props.children }</div>
+        <div className="Inner">
+          <CancelContext.Provider value={ this.props.onCancelEvent }>
+            { props.children }
+          </CancelContext.Provider>
+        </div>
       </div>
     )
   }
