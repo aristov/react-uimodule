@@ -14,9 +14,30 @@
 }
 .Popup > .Inner
 {
+  position: relative;
   background: var(--popup-bg-color);
   box-shadow: var(--popup-box-shadow);
   border-radius: var(--control-border-radius);
+}
+.Popup.modal
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.Popup.modal::before
+{
+  content: '';
+  position: fixed;
+  top: -100%;
+  right: -100%;
+  bottom: -100%;
+  left: -100%;
+  background: rgba(0, 0, 0, .3);
 }
 .Popup[aria-hidden=false]
 {

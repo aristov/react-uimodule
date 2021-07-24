@@ -24,7 +24,7 @@ export class Popup extends React.Component
     }
     return (
       <div
-        className="Popup"
+        className={ ['Popup', props.modal && 'modal'].filter(Boolean).join(' ') }
         aria-hidden={ !props.hidden && !state.hidden? null : props.hidden }
         onKeyDown={ this.onKeyDown }
         ref={ this._ref }
@@ -52,12 +52,15 @@ export class Popup extends React.Component
 
   close() {
     const handler = this.node.ontransitionend = () => {
+      if(this.hidden) {
+        return
+      }
       clearTimeout(timeoutId)
       this.node.ontransitionend = null
       this.setState({ hidden : true })
     }
     const timeoutId = setTimeout(handler, Math.max(...this.durations))
-    if(this.node.contains(document.activeElement)) {
+    if(this.props.modal || this.node.contains(document.activeElement)) {
       this.props.anchor?.node.focus()
     }
     this.removeHandlers()
@@ -127,10 +130,11 @@ export class Popup extends React.Component
   }
 
   onDocClick = e => {
-    if(this.props.hidden && this.state.hidden) {
+    if(this.hidden) {
       return
     }
-    if(this.node.contains(e.target)) {
+    const node = this.node
+    if(e.target !== node && node.contains(e.target)) {
       return
     }
     if(this.props.anchor?.node.contains(e.target)) {
@@ -184,7 +188,7 @@ export class Popup extends React.Component
    * @returns {number[]}
    */
   get durations() {
-    if(this.props.hidden && this.state.hidden) {
+    if(this.hidden) {
       return [0]
     }
     const style = getComputedStyle(this.node)
