@@ -88,16 +88,14 @@ export class Popup extends React.Component
     if(this.node.contains(document.activeElement)) {
       this.props.anchor?.node.focus()
     }
-    if(this._timeoutId) {
-      clearTimeout(this._timeoutId)
-      this._timeoutId = null
-    }
-    document.removeEventListener('click', this.onDocClick)
-    document.removeEventListener('focusin', this.onDocFocusIn)
-    document.removeEventListener('scroll', this.onDocScroll, true)
+    this.removeHandlers()
   }
 
   componentWillUnmount() {
+    this.removeHandlers()
+  }
+
+  removeHandlers() {
     if(this._timeoutId) {
       clearTimeout(this._timeoutId)
       this._timeoutId = null
@@ -151,7 +149,7 @@ export class Popup extends React.Component
   onKeyDown = e => {
     if(e.code === 'Escape') {
       e.stopPropagation()
-      this.props.onKeyDownEscape?.(e)
+      this.props.onCancelEvent?.(e)
     }
   }
 
@@ -165,7 +163,7 @@ export class Popup extends React.Component
     if(this.props.anchor?.node.contains(e.target)) {
       return
     }
-    this.props.onClickOutside?.(e)
+    this.props.onCancelEvent?.(e)
   }
 
   onDocFocusIn = e => {
@@ -176,7 +174,7 @@ export class Popup extends React.Component
     if(popup && popup.classList.contains('modal') && !popup.contains(this.node)) {
       return
     }
-    this.props.onFocusOutside?.(e)
+    this.props.onCancelEvent?.(e)
   }
 
   onDocScroll = e => {
