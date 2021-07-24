@@ -4,14 +4,11 @@ import { Heading } from './Heading'
 import { Button } from './Button'
 import { Popup } from './Popup'
 
-export default function PopupExample() {
+function PopupSimpleExample() {
   const button = useRef(null)
-  const modalButton = useRef(null)
   const [hidden, setHidden] = useState(true)
-  const [modalHidden, setModalHidden] = useState(true)
   return (
-    <Example>
-      <Heading>Popup</Heading>
+    <>
       <Button onClick={ () => setHidden(!hidden) } ref={ button }>
         Popup
       </Button>
@@ -22,18 +19,36 @@ export default function PopupExample() {
       >
         <Button onClick={ () => setHidden(true) }>Close the popup</Button>
       </Popup>
+    </>
+  )
+}
 
-      <Button onClick={ () => setModalHidden(!modalHidden) } ref={ modalButton }>
+function PopupModalExample() {
+  const modalButton = useRef(null)
+  const [hidden, setHidden] = useState(true)
+  return (
+    <>
+      <Button onClick={ () => setHidden(!hidden) } ref={ modalButton }>
         Modal popup
       </Button>
       <Popup
         modal
-        hidden={ modalHidden }
+        hidden={ hidden }
         anchor={ modalButton.current }
-        onCancelEvent={ () => setModalHidden(true) }
+        onCancelEvent={ () => setHidden(true) }
       >
-        <Button onClick={ () => setModalHidden(true) }>Close the popup</Button>
+        <Button onClick={ () => setHidden(true) }>Close the popup</Button>
       </Popup>
+    </>
+  )
+}
+
+export default function PopupExample() {
+  return (
+    <Example>
+      <Heading>Popup</Heading>
+      <PopupSimpleExample/>
+      <PopupModalExample/>
     </Example>
   )
 }
