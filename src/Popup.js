@@ -74,6 +74,7 @@ export class Popup extends React.Component
     this.updatePosition()
     setTimeout(() => this.setState({ hidden : false }))
     document.addEventListener('click', this.onDocClick)
+    document.addEventListener('focusin', this.onDocFocusIn)
     document.addEventListener('scroll', this.onDocScroll, true)
   }
 
@@ -92,6 +93,7 @@ export class Popup extends React.Component
       this._timeoutId = null
     }
     document.removeEventListener('click', this.onDocClick)
+    document.removeEventListener('focusin', this.onDocFocusIn)
     document.removeEventListener('scroll', this.onDocScroll, true)
   }
 
@@ -101,6 +103,7 @@ export class Popup extends React.Component
       this._timeoutId = null
     }
     document.removeEventListener('click', this.onDocClick)
+    document.removeEventListener('focusin', this.onDocFocusIn)
     document.removeEventListener('scroll', this.onDocScroll, true)
   }
 
@@ -148,7 +151,7 @@ export class Popup extends React.Component
   onKeyDown = e => {
     if(e.code === 'Escape') {
       e.stopPropagation()
-      this.props.onKeyDownEscape?.()
+      this.props.onKeyDownEscape?.(e)
     }
   }
 
@@ -163,6 +166,17 @@ export class Popup extends React.Component
       return
     }
     this.props.onClickOutside?.(e)
+  }
+
+  onDocFocusIn = e => {
+    if(this.node.contains(e.target) || this.props.anchor?.node.contains(e.target)) {
+      return
+    }
+    const popup = e.target.closest('.Popup')
+    if(popup && popup.classList.contains('modal') && !popup.contains(this.node)) {
+      return
+    }
+    this.props.onFocusOutside?.(e)
   }
 
   onDocScroll = e => {
