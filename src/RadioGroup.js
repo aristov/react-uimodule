@@ -7,7 +7,7 @@ export class RadioGroup extends React.Component
 {
   state = {
     active : false,
-    value : this.props.defaultValue,
+    value : this.props.defaultValue || null,
   }
 
   render() {
@@ -27,12 +27,13 @@ export class RadioGroup extends React.Component
         {
           this.props.radios.map((radio, i) => {
             return (
-              <Radio key={ radio.value || radio.text }
-                     value={ radio.value || radio.text }
-                     checked={ radio.value === value }
-                     disabled={ this.props.disabled }
-                     focus={ value? radio.value === value : !i }
-                     updateValue={ this.updateValue }
+              <Radio
+                key={ radio.value || radio.text }
+                value={ radio.value || radio.text }
+                checked={ radio.value === value }
+                disabled={ this.props.disabled }
+                focus={ value? radio.value === value : !i }
+                updateValue={ this.updateValue }
               >{ radio.text }</Radio>
             )
           })
@@ -50,7 +51,7 @@ export class RadioGroup extends React.Component
   }
 
   moveFocus(offset) {
-    const value = this.state.value
+    const value = this.props.value || this.state.value
     const radios = this.props.radios
     let index = radios.length + offset
     if(value) {
@@ -100,6 +101,9 @@ export class RadioGroup extends React.Component
   }
 
   onKeyUp_Space() {
-    this.setState({ active : false })
+    this.setState({
+      active : false,
+      value : this.state.value || this.props.radios[0].value
+    })
   }
 }

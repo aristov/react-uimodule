@@ -46,17 +46,9 @@
 {
   border-color: var(--hover-border-color);
 }
-.Radio.active > .Control
-{
-  background-color: var(--active-bg-color);
-}
 .Radio[aria-checked=true] > .Control
 {
   background-color: var(--checked-bg-color);
-}
-.Radio[aria-checked=true].active > .Control
-{
-  background-color: var(--checked-active-bg-color);
 }
 .Radio[aria-disabled=true],
 .Radio[aria-disabled=true] > .Label

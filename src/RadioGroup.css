@@ -25,3 +25,11 @@
   border-color: var(--focus-border-color);
   box-shadow: var(--focus-box-shadow);
 }
+.RadioGroup.active .Radio.focus > .Control
+{
+  background-color: var(--active-bg-color);
+}
+.RadioGroup.active .Radio[aria-checked=true] > .Control
+{
+  background-color: var(--checked-active-bg-color);
+}
