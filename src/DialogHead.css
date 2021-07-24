@@ -1,0 +1,27 @@
+@import 'root.css';
+
+.DialogHead
+{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  box-sizing: border-box;
+  position: relative;
+  padding: var(--block-padding);
+}
+.DialogHead .Heading
+{
+  align-self: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.DialogHead .CloseButton
+{
+  align-self: center;
+  position: relative;
+  font-size: 1.3rem;
+}
+.DialogHead + .DialogBody
+{
+  padding-top: 0;
+}

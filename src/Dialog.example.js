@@ -1,9 +1,11 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, createElement } from 'react'
 import { Example } from './Example'
 import { Heading } from './Heading'
 import { Button } from './Button'
 import { Dialog } from './Dialog'
 import { TextBox } from './TextBox'
+import { DialogHead } from './DialogHead'
+import { DialogBody } from './DialogBody'
 
 function DialogSimpleExample() {
   const button = useRef(null)
@@ -18,8 +20,13 @@ function DialogSimpleExample() {
         anchor={ button.current }
         onCancelEvent={ () => setHidden(true) }
       >
-        <TextBox label="Say something"/>
-        <Button onClick={ () => setHidden(true) }>Close</Button>
+        <DialogHead>
+          <Heading>Hello!</Heading>
+        </DialogHead>
+        <DialogBody>
+          <TextBox label="Say something"/>
+          <Button onClick={ () => setHidden(true) }>Close</Button>
+        </DialogBody>
       </Dialog>
     </>
   )
@@ -39,8 +46,13 @@ function DialogModalExample() {
         anchor={ modalButton.current }
         onCancelEvent={ () => setHidden(true) }
       >
-        <TextBox label="Say something"/>
-        <Button onClick={ () => setHidden(true) }>Close</Button>
+        <DialogHead>
+          <Heading>Hello!</Heading>
+        </DialogHead>
+        <DialogBody>
+          <TextBox label="Say something"/>
+          <Button onClick={ () => setHidden(true) }>Close</Button>
+        </DialogBody>
       </Dialog>
     </>
   )

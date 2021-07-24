@@ -1,5 +1,6 @@
 import React from 'react'
 import { Popup } from './Popup'
+import './Dialog.css'
 
 export class Dialog extends React.Component
 {

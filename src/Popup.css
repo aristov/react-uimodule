@@ -15,9 +15,11 @@
 .Popup > .Inner
 {
   position: relative;
+  display: flex;
   background: var(--popup-bg-color);
   box-shadow: var(--popup-box-shadow);
   border-radius: var(--control-border-radius);
+  max-height: 100%;
 }
 .Popup.modal
 {
