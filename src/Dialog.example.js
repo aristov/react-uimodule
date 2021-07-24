@@ -7,6 +7,7 @@ import { TextBox } from './TextBox'
 import { DialogHead } from './DialogHead'
 import { DialogBody } from './DialogBody'
 import { CancelButton } from './CancelButton'
+import { CloseButton } from './CloseButton'
 
 function DialogSimpleExample() {
   const button = useRef(null)
@@ -27,7 +28,7 @@ function DialogSimpleExample() {
         </DialogHead>
         <DialogBody>
           <TextBox label="Say something"/>
-          <Button onClick={ () => setHidden(true) }>Close</Button>
+          <CloseButton>Close</CloseButton>
         </DialogBody>
       </Dialog>
     </>
@@ -35,17 +36,17 @@ function DialogSimpleExample() {
 }
 
 function DialogModalExample() {
-  const modalButton = useRef(null)
+  const button = useRef(null)
   const [hidden, setHidden] = useState(true)
   return (
     <>
-      <Button onClick={ () => setHidden(!hidden) } ref={ modalButton }>
+      <Button onClick={ () => setHidden(!hidden) } ref={ button }>
         Open modal dialog
       </Button>
       <Dialog
         modal
         hidden={ hidden }
-        anchor={ modalButton.current }
+        anchor={ button.current }
         onCancelEvent={ () => setHidden(true) }
       >
         <DialogHead>
@@ -54,7 +55,7 @@ function DialogModalExample() {
         </DialogHead>
         <DialogBody>
           <TextBox label="Say something"/>
-          <Button onClick={ () => setHidden(true) }>Close</Button>
+          <CloseButton>Close</CloseButton>
         </DialogBody>
       </Dialog>
     </>
