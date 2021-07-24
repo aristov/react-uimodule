@@ -57,7 +57,7 @@ export class Popup extends React.Component
         aria-hidden={ !props.hidden && !state.hidden? null : props.hidden }
         ref={ this._ref }
       >
-        { props.children }
+        <div className="Inner">{ props.children }</div>
       </div>
     )
   }
