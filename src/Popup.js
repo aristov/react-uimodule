@@ -76,6 +76,7 @@ export class Popup extends React.Component
     document.addEventListener('click', this.onDocClick)
     document.addEventListener('focusin', this.onDocFocusIn)
     document.addEventListener('scroll', this.onDocScroll, true)
+    window.addEventListener('resize', this.onWinResize)
   }
 
   close() {
@@ -103,6 +104,7 @@ export class Popup extends React.Component
     document.removeEventListener('click', this.onDocClick)
     document.removeEventListener('focusin', this.onDocFocusIn)
     document.removeEventListener('scroll', this.onDocScroll, true)
+    window.removeEventListener('resize', this.onWinResize)
   }
 
   updatePosition = () => {
@@ -193,6 +195,10 @@ export class Popup extends React.Component
     style.top = popup.top + anchor.top - top + 'px'
     style.left = popup.left + anchor.left - left + 'px'
     this._position = [anchor.top, anchor.left]
+    this.updatePositionDebounce()
+  }
+
+  onWinResize = () => {
     this.updatePositionDebounce()
   }
 
