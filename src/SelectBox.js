@@ -13,11 +13,11 @@ export class SelectBox extends React.Component
     value : this.props.defaultValue || null,
   }
 
-  _popupId = generateId()
-
   _ref = React.createRef()
 
   _listBox = React.createRef()
+
+  _listBoxId = generateId()
 
   render() {
     const classList = ['SelectBox Widget', this.state.active && 'active']
@@ -30,7 +30,7 @@ export class SelectBox extends React.Component
           className={ classList.filter(Boolean).join(' ') }
           tabIndex={ this.props.disabled? null : 0 }
           aria-haspopup="listbox"
-          aria-controls={ this._popupId }
+          aria-controls={ this._listBoxId }
           aria-expanded={ this.state.expanded }
           aria-required={ this.props.required }
           aria-disabled={ this.props.disabled }
@@ -48,14 +48,14 @@ export class SelectBox extends React.Component
           hidden={ !this.state.expanded }
           anchor={ this }
           onCancelEvent={ this.activate }
-          id={ this._popupId }
         >
           <ListBox
-            options={ this.props.options }
+            id={ this._listBoxId }
             tabIndex={ null }
+            options={ this.props.options }
+            value={ value }
             onClick={ this.onListBoxClick }
             onChange={ this.onListBoxChange }
-            value={ value }
             ref={ this._listBox }
           />
         </Popup>

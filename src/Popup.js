@@ -28,7 +28,6 @@ export class Popup extends React.Component
         aria-hidden={ !props.hidden && !state.hidden? null : props.hidden }
         onKeyDown={ this.onKeyDown }
         ref={ this._ref }
-        id={ this.props.id }
       >
         <div className="Inner">{ props.children }</div>
       </div>

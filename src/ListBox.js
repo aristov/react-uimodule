@@ -16,8 +16,9 @@ export class ListBox extends React.Component
     const tabIndex = this.props.disabled? null : this.props.tabIndex
     return (
       <div
-        role="listbox"
         className={ ['ListBox Widget', this.state.active && 'active'].filter(Boolean).join(' ') }
+        role="listbox"
+        id={ this.props.id }
         tabIndex={ typeof tabIndex === 'undefined'? 0 : tabIndex }
         aria-disabled={ this.props.disabled }
         onClick={ this.onClick }
