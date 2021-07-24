@@ -12,13 +12,20 @@ export class Button extends React.Component
   _ref = React.createRef()
 
   render() {
+    const tabIndex = this.props.disabled? null : this.props.tabIndex
+    const classList = [
+      this.props.classList,
+      'Button Widget',
+      this.state.active && 'active'
+    ]
     return (
       <div
+        className={ classList.flat(Infinity).filter(Boolean).join(' ') }
+        tabIndex={ typeof tabIndex === 'undefined'? 0 : tabIndex }
+        title={ this.props.title }
         role="button"
-        className={ ['Button Widget', this.state.active && 'active'].filter(Boolean).join(' ') }
         aria-pressed={ this.props.pressed ?? this.state.pressed }
         aria-disabled={ this.props.disabled }
-        tabIndex={ this.props.disabled? null : 0 }
         onBlur={ this.onBlur }
         onClick={ this.onClick }
         onMouseDown={ this.onMouseDown }
