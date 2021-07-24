@@ -4,8 +4,8 @@ import './Heading.css'
 export function Heading(props) {
   return (
     <div
-      role="heading"
       className="Heading"
+      role="heading"
       aria-level={ props.level || 1 }
     >
       { props.children }

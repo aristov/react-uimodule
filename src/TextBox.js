@@ -24,11 +24,11 @@ export class TextBox extends React.Component
         { this.props.label && <Label>{ this.props.label }</Label> }
         <Control>
           <div
-            role="textbox"
             className="Edit"
             tabIndex={ this.props.disabled? null : 0 }
-            aria-disabled={ this.props.disabled }
             contentEditable={ !this.props.disabled }
+            role="textbox"
+            aria-disabled={ this.props.disabled }
             onInput={ this.onInput }
             onKeyDown={ this.onKeyDown }
             onPaste={ this.onPaste }

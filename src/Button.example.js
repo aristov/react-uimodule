@@ -9,7 +9,10 @@ export default function ButtonExample() {
     <Example>
       <Heading>Button</Heading>
       <Button>Simple</Button>
-      <Button pressed={ pressed } onClick={ () => setPressed(!pressed) }>
+      <Button
+        pressed={ pressed }
+        onClick={ () => setPressed(!pressed) }
+      >
         Pressed (controlled)
       </Button>
       <Button defaultPressed={ true }>Pressed (uncontrolled)</Button>

@@ -8,13 +8,24 @@ export default function ButtonExample() {
   return (
     <Example>
       <Heading>CheckBox</Heading>
-      <CheckBox>Not checked</CheckBox>
-      <CheckBox checked={ checked } onClick={ () => setChecked(!checked) }>
-        Controlled
-      </CheckBox>
-      <CheckBox defaultChecked>Uncontrolled</CheckBox>
-      <CheckBox defaultChecked="mixed">Mixed</CheckBox>
-      <CheckBox disabled>Disabled</CheckBox>
+      <CheckBox label="Not checked"/>
+      <CheckBox
+        label="Controlled"
+        checked={ checked }
+        onClick={ () => setChecked(!checked) }
+      />
+      <CheckBox
+        label="Uncontrolled"
+        defaultChecked
+      />
+      <CheckBox
+        label="Mixed"
+        defaultChecked="mixed"
+      />
+      <CheckBox
+        label="Disabled"
+        disabled
+      />
     </Example>
   )
 }

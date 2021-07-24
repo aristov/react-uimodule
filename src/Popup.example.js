@@ -28,7 +28,10 @@ function PopupModalExample() {
   const [hidden, setHidden] = useState(true)
   return (
     <>
-      <Button onClick={ () => setHidden(!hidden) } ref={ modalButton }>
+      <Button
+        onClick={ () => setHidden(!hidden) }
+        ref={ modalButton }
+      >
         Open modal popup
       </Button>
       <Popup

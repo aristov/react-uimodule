@@ -4,15 +4,15 @@ import { Heading } from './Heading'
 import { ListBox } from './ListBox'
 
 const options = [
-  'Rehearsal',
-  'Lesson',
-  'Practice',
-  'Master class',
-  'Concert',
-  'Party',
-  'Parking',
+  'jQuery',
+  'Angular',
+  'React',
+  'Vue',
+  'Ember',
+  'Backbone',
+  'Svelte',
 ]
-.map((text, i) => ({ text, value : String(i) }))
+.map((label, i) => ({ label, value : String(i) }))
 
 export default function ListBoxExample() {
   const [value, setValue] = useState(options[2].value)

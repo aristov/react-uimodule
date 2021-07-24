@@ -17,9 +17,9 @@ export class ListBox extends React.Component
     return (
       <div
         className={ ['ListBox Widget', this.state.active && 'active'].filter(Boolean).join(' ') }
-        role="listbox"
         id={ this.props.id }
         tabIndex={ typeof tabIndex === 'undefined'? 0 : tabIndex }
+        role="listbox"
         aria-disabled={ this.props.disabled }
         onClick={ this.onClick }
         onKeyDown={ this.onKeyDown }
@@ -30,13 +30,13 @@ export class ListBox extends React.Component
           this.props.options.map(option => {
             return (
               <Option
-                key={ option.value || option.text }
-                value={ option.value || option.text }
+                key={ option.value || option.label }
+                value={ option.value || option.label }
                 selected={ option.value === value }
                 disabled={ this.props.disabled }
                 updateValue={ this.updateValue }
               >
-                { option.text }
+                { option.label }
               </Option>
             )
           })

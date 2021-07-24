@@ -17,8 +17,8 @@ export class Radio extends React.Component
     ]
     return (
       <div
-        role="radio"
         className={ classList.filter(Boolean).join(' ') }
+        role="radio"
         aria-checked={ this.props.checked }
         aria-disabled={ this.props.disabled }
         onClick={ this.onClick }
@@ -27,7 +27,7 @@ export class Radio extends React.Component
         onMouseUp={ this.onMouseUp }
       >
         <Control/>
-        <Label>{ this.props.children }</Label>
+        { this.props.label && <Label>{ this.props.label }</Label> }
       </div>
     )
   }

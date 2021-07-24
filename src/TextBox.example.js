@@ -14,8 +14,14 @@ export default function ButtonExample() {
         value={ value }
         onChange={ e => setValue(e.target.value) }
       />
-      <TextBox label="Uncontrolled" defaultValue="Hello React!"/>
-      <TextBox label="Disabled" disabled/>
+      <TextBox
+        label="Uncontrolled"
+        defaultValue="Hello React!"
+      />
+      <TextBox
+        label="Disabled"
+        disabled
+      />
     </Example>
   )
 }

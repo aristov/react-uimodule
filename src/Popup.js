@@ -49,7 +49,7 @@ export class Popup extends React.Component
 
   show() {
     this.updatePosition()
-    setTimeout(() => this.setState({ hidden : false }))
+    setImmediate(() => this.setState({ hidden : false }))
     document.addEventListener('click', this.onDocClick)
     document.addEventListener('focusin', this.onDocFocusIn)
     document.addEventListener('scroll', this.onDocScroll, true)

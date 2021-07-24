@@ -4,11 +4,11 @@ import { Heading } from './Heading'
 import { RadioGroup } from './RadioGroup'
 
 const radios = [
-  'Rehearsal',
-  'Lesson',
-  'Practice',
+  'Babel',
+  'React',
+  'Webpack',
 ]
-.map((text, i) => ({ text, value : String(i) }))
+.map((label, i) => ({ label, value : String(i) }))
 
 export default function ButtonExample() {
   const [value, setValue] = useState(radios[1].value)

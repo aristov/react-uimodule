@@ -15,11 +15,11 @@ export class CheckBox extends React.Component
   render() {
     return (
       <div
-        role="checkbox"
         className={ ['CheckBox Widget', this.state.active && 'active'].filter(Boolean).join(' ') }
+        tabIndex={ this.props.disabled? null : 0 }
+        role="checkbox"
         aria-checked={ this.props.checked ?? this.state.checked }
         aria-disabled={ this.props.disabled }
-        tabIndex={ this.props.disabled? null : 0 }
         onBlur={ this.onBlur }
         onClick={ this.onClick }
         onMouseDown={ this.onMouseDown }
@@ -30,7 +30,7 @@ export class CheckBox extends React.Component
         ref={ this._ref }
       >
         <Control/>
-        <Label>{ this.props.children }</Label>
+        { this.props.label && <Label>{ this.props.label }</Label> }
       </div>
     )
   }

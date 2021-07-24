@@ -26,9 +26,9 @@ export class SelectBox extends React.Component
     return (
       <>
         <div
-          role="combobox"
           className={ classList.filter(Boolean).join(' ') }
           tabIndex={ this.props.disabled? null : 0 }
+          role="combobox"
           aria-haspopup="listbox"
           aria-controls={ this._listBoxId }
           aria-expanded={ this.state.expanded }
@@ -41,7 +41,7 @@ export class SelectBox extends React.Component
         >
           { this.props.label && <Label>{ this.props.label }</Label> }
           <Control>
-            <div className="Inner">{ option?.text || ' ' }</div>
+            <div className="Inner">{ option?.label || ' ' }</div>
           </Control>
         </div>
         <Popup

@@ -10,8 +10,8 @@ export class Option extends React.Component
   render() {
     return (
       <div
-        role="option"
         className={ ['Option Widget', this.state.active && 'active'].filter(Boolean).join(' ') }
+        role="option"
         aria-selected={ this.props.selected }
         aria-disabled={ this.props.disabled }
         onClick={ this.onClick }

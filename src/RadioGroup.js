@@ -14,9 +14,9 @@ export class RadioGroup extends React.Component
     const value = this.props.value ?? this.state.value
     return (
       <div
-        role="radiogroup"
         className={ ['RadioGroup Widget', this.state.active && 'active'].filter(Boolean).join(' ') }
         tabIndex={ this.props.disabled? null : 0 }
+        role="radiogroup"
         aria-disabled={ this.props.disabled }
         onKeyDown={ this.onKeyDown }
         onKeyUp={ this.onKeyUp }
@@ -28,13 +28,14 @@ export class RadioGroup extends React.Component
           this.props.radios.map((radio, i) => {
             return (
               <Radio
-                key={ radio.value || radio.text }
-                value={ radio.value || radio.text }
+                label={ radio.label }
+                key={ radio.value || radio.label }
+                value={ radio.value || radio.label }
                 checked={ radio.value === value }
                 disabled={ this.props.disabled }
                 focus={ value? radio.value === value : !i }
                 updateValue={ this.updateValue }
-              >{ radio.text }</Radio>
+              />
             )
           })
         }

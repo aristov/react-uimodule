@@ -16,11 +16,11 @@ export class Dialog extends React.Component
         onCancelEvent={ this.props.onCancelEvent }
       >
         <div
-          role="dialog"
           className="Dialog"
+          id={ this.props.id }
+          role="dialog"
           aria-modal={ this.props.modal }
           aria-hidden={ this.props.hidden }
-          id={ this.props.id }
           onKeyDown={ this.onKeyDown }
           ref={ this._ref }
         >
