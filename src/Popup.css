@@ -4,7 +4,7 @@
 {
   position: fixed;
   display: block;
-  margin: var(--widget-margin);
+  /*margin: var(--widget-margin);*/
   padding: 5px;
   max-width: 100%;
   max-height: 100%;
