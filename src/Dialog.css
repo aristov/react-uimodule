@@ -1,0 +1,13 @@
+.Dialog
+{
+  display: grid;
+  grid-template-rows: auto 1fr;
+  position: relative;
+  box-sizing: border-box;
+  overflow: auto;
+  outline: none;
+}
+.Dialog .Heading
+{
+  margin: var(--widget-margin);
+}

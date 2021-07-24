@@ -6,6 +6,7 @@ class Showcase extends React.Component
   render() {
     return (
       <div className="Showcase">
+        { createElement(require('./Dialog.example').default) }
         { createElement(require('./SelectBox.example').default) }
         { createElement(require('./ListBox.example').default) }
         { createElement(require('./Popup.example').default) }
