@@ -2,37 +2,8 @@ import debounce from 'lodash/debounce'
 import React from 'react'
 import './Popup.css'
 
-/**
- *
- * props.hidden === true && state.hidden === true
- * => render = false
- *
- *
- *
- * props.hidden === false && state.hidden === true
- * => render = true
- * => aria-hidden = false
- *
- * show() => state.hidden = false
- *
- * props.hidden === false && state.hidden === false
- * => render = true
- * => aria-hidden = null
- *
- *
- *
- * props.hidden === true && state.hidden === false
- * => render = true
- * => aria-hidden = true
- *
- * close() => state.hidden = true
- *
- * props.hidden === true && state.hidden === true
- * => render = false
- *
- */
-
-const DEBOUNCE_WAIT = 200
+const POSITION_UPDATE_DEBOUNCE = 200
+const POSITION_UPDATE_INTERVAL = 1000
 
 export class Popup extends React.Component
 {
@@ -117,7 +88,7 @@ export class Popup extends React.Component
     const { alternatives, fallback } = directions[direction]
     let item, position
     if(!this._timeoutId) {
-      this._timeoutId = setTimeout(() => this.updatePosition(), 1000)
+      this._timeoutId = setTimeout(() => this.updatePosition(), POSITION_UPDATE_INTERVAL)
     }
     for(item of [direction, ...alternatives]) {
       position = directions[item].handler(aRect, pRect)
@@ -131,7 +102,7 @@ export class Popup extends React.Component
     this._position = [aRect.top, aRect.left]
   }
 
-  updatePositionDebounce = debounce(this.updatePosition, DEBOUNCE_WAIT)
+  updatePositionDebounce = debounce(this.updatePosition, POSITION_UPDATE_DEBOUNCE)
 
   /**
    * @param {array} position
