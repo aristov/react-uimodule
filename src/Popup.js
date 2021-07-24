@@ -55,6 +55,7 @@ export class Popup extends React.Component
       <div
         className="Popup"
         aria-hidden={ !props.hidden && !state.hidden? null : props.hidden }
+        onKeyDown={ this.onKeyDown }
         ref={ this._ref }
       >
         <div className="Inner">{ props.children }</div>
@@ -103,7 +104,7 @@ export class Popup extends React.Component
     document.removeEventListener('scroll', this.onDocScroll, true)
   }
 
-  updatePosition() {
+  updatePosition = () => {
     const direction = this.direction
     if(direction === 'none' || !this.props.anchor || this.props.modal || this.hidden) {
       return this.setPosition(this._position = [null, null])
@@ -127,7 +128,7 @@ export class Popup extends React.Component
     this._position = [aRect.top, aRect.left]
   }
 
-  updatePositionDebounce = debounce(this.updatePosition.bind(this), DEBOUNCE_WAIT)
+  updatePositionDebounce = debounce(this.updatePosition, DEBOUNCE_WAIT)
 
   /**
    * @param {array} position
@@ -142,6 +143,13 @@ export class Popup extends React.Component
     style.left = left === null?
       null :
       Math.min(Math.max(left, 0), window.innerWidth - rect.width) + 'px'
+  }
+
+  onKeyDown = e => {
+    if(e.code === 'Escape') {
+      e.stopPropagation()
+      this.props.onKeyDownEscape?.()
+    }
   }
 
   onDocClick = e => {

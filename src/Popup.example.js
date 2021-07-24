@@ -17,6 +17,7 @@ export default function PopupExample() {
         hidden={ hidden }
         anchor={ button.current }
         onClickOutside={ () => setHidden(true) }
+        onKeyDownEscape={ () => setHidden(true) }
       >
         <Button onClick={ () => setHidden(true) }>Close the popup</Button>
       </Popup>
