@@ -8,37 +8,51 @@ export class ListBox extends React.Component
 {
   state = {
     active : false,
-    value : this.props.defaultValue,
+    value : this.props.defaultValue || null,
   }
 
   render() {
     const value = this.props.value ?? this.state.value
+    const tabIndex = this.props.disabled? null : this.props.tabIndex
     return (
       <div
         role="listbox"
         className={ ['ListBox Widget', this.state.active && 'active'].filter(Boolean).join(' ') }
-        tabIndex={ this.props.disabled? null : 0 }
+        tabIndex={ typeof tabIndex === 'undefined'? 0 : tabIndex }
         aria-disabled={ this.props.disabled }
+        onClick={ this.onClick }
         onKeyDown={ this.onKeyDown }
         onKeyUp={ this.onKeyUp }
       >
-        {
-          this.props.label && <Label>{ this.props.label }</Label>
-        }
+        { this.props.label && <Label>{ this.props.label }</Label> }
         <Control>{
           this.props.options.map(option => {
             return (
-              <Option key={ option.value || option.text }
-                      value={ option.value || option.text }
-                      selected={ option.value === value }
-                      disabled={ this.props.disabled }
-                      updateValue={ this.updateValue }
-              >{ option.text }</Option>
+              <Option
+                key={ option.value || option.text }
+                value={ option.value || option.text }
+                selected={ option.value === value }
+                disabled={ this.props.disabled }
+                updateValue={ this.updateValue }
+              >
+                { option.text }
+              </Option>
             )
           })
         }</Control>
       </div>
     )
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const value = this.props.value
+    if(typeof value === 'undefined') {
+      return
+    }
+    if(this.state.value === value) {
+      return
+    }
+    this.setState({ value })
   }
 
   updateValue = value => {
@@ -47,6 +61,10 @@ export class ListBox extends React.Component
     }
     this.setState({ value })
     this.props.onChange?.(value)
+  }
+
+  onClick = e => {
+    this.props.onClick?.(e)
   }
 
   onKeyDown = e => {
@@ -65,20 +83,22 @@ export class ListBox extends React.Component
 
   onKeyDown_ArrowUp(e) {
     e.preventDefault()
-    const value = this.state.value
+    const value = this.props.value || this.state.value
     const options = this.props.options
-    const index = options.findIndex(option => option.value === value) - 1
-    if(index > -1) {
+    let index = value?
+      options.findIndex(option => option.value === value) :
+      options.length
+    if(--index > -1) {
       this.updateValue(options[index].value)
     }
   }
 
   onKeyDown_ArrowDown(e) {
     e.preventDefault()
-    const value = this.state.value
+    const value = this.props.value || this.state.value
     const options = this.props.options
-    const index = options.findIndex(option => option.value === value) + 1
-    if(index < options.length) {
+    let index = options.findIndex(option => option.value === value)
+    if(++index < options.length) {
       this.updateValue(options[index].value)
     }
   }
