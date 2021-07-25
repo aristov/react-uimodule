@@ -11,6 +11,8 @@ export class ListBox extends React.Component
     value : this.props.defaultValue || null,
   }
 
+  elem = React.createRef()
+
   render() {
     const value = this.props.value ?? this.state.value
     const tabIndex = this.props.disabled? null : this.props.tabIndex
@@ -24,20 +26,20 @@ export class ListBox extends React.Component
         onClick={ this.onClick }
         onKeyDown={ this.onKeyDown }
         onKeyUp={ this.onKeyUp }
+        ref={ this.elem }
       >
         { this.props.label && <Label>{ this.props.label }</Label> }
         <Control>{
           this.props.options.map(option => {
             return (
               <Option
+                label={ option.label || option.value }
                 key={ option.value || option.label }
                 value={ option.value || option.label }
                 selected={ option.value === value }
                 disabled={ this.props.disabled }
                 updateValue={ this.updateValue }
-              >
-                { option.label }
-              </Option>
+              />
             )
           })
         }</Control>
@@ -111,5 +113,9 @@ export class ListBox extends React.Component
 
   onKeyUp_Space() {
     this.setState({ active : false })
+  }
+
+  get node() {
+    return this.elem.current
   }
 }
