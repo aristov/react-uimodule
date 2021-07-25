@@ -1,4 +1,5 @@
 import React from 'react'
+import generateId from './generateId'
 import { Label } from './Label'
 import { Control } from './Control'
 import { Popup } from './Popup'
@@ -155,16 +156,4 @@ export class SelectBox extends React.Component
   get node() {
     return this._ref.current
   }
-}
-
-let counter = 0
-
-function generateId() { // fixme: 1, 3, 5, 7, ...
-  let id, str
-  do {
-    str = (counter++).toString(36)
-    id = 'ID_' + '0'.repeat(Math.max(0, 7 - str.length)) + str
-  }
-  while(document.getElementById(id))
-  return id
 }
