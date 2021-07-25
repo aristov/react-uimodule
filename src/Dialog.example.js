@@ -15,7 +15,7 @@ function DialogSimpleExample() {
   return (
     <>
       <Button onClick={ () => setHidden(!hidden) } ref={ button }>
-        Open simple dialog
+        Open dialog
       </Button>
       <Dialog
         hidden={ hidden }
