@@ -7,6 +7,7 @@ export function Heading(props) {
       className="Heading"
       role="heading"
       aria-level={ props.level || 1 }
+      { ...props }
     >
       { props.children }
     </div>

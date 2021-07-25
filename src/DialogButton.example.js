@@ -16,15 +16,9 @@ export default function DialogButtonExample() {
       <DialogButton
         label="Open dialog"
         dialog={ props => (
-          <Dialog { ...props }>
-            <DialogHead>
-              <Heading>Hello!</Heading>
-              <CancelButton/>
-            </DialogHead>
-            <DialogBody>
-              <TextBox label="Say something"/>
-              <CloseButton>Close</CloseButton>
-            </DialogBody>
+          <Dialog title="Hello!" { ...props }>
+            <TextBox label="Say something"/>
+            <CloseButton>Close</CloseButton>
           </Dialog>
         ) }
       />

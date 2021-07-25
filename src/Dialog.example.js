@@ -4,9 +4,6 @@ import { Heading } from './Heading'
 import { Button } from './Button'
 import { Dialog } from './Dialog'
 import { TextBox } from './TextBox'
-import { DialogHead } from './DialogHead'
-import { DialogBody } from './DialogBody'
-import { CancelButton } from './CancelButton'
 import { CloseButton } from './CloseButton'
 
 function DialogSimpleExample() {
@@ -18,18 +15,13 @@ function DialogSimpleExample() {
         Open dialog
       </Button>
       <Dialog
+        title="Hello!"
         hidden={ hidden }
         anchor={ button.current }
         onCancelEvent={ () => setHidden(true) }
       >
-        <DialogHead>
-          <Heading>Hello!</Heading>
-          <CancelButton/>
-        </DialogHead>
-        <DialogBody>
-          <TextBox label="Say something"/>
-          <CloseButton>Close</CloseButton>
-        </DialogBody>
+        <TextBox label="Say something"/>
+        <CloseButton>Close</CloseButton>
       </Dialog>
     </>
   )
@@ -45,18 +37,13 @@ function DialogModalExample() {
       </Button>
       <Dialog
         modal
+        title="Hello!"
         hidden={ hidden }
         anchor={ button.current }
         onCancelEvent={ () => setHidden(true) }
       >
-        <DialogHead>
-          <Heading>Hello!</Heading>
-          <CancelButton/>
-        </DialogHead>
-        <DialogBody>
-          <TextBox label="Say something"/>
-          <CloseButton>Close</CloseButton>
-        </DialogBody>
+        <TextBox label="Say something"/>
+        <CloseButton>Close</CloseButton>
       </Dialog>
     </>
   )

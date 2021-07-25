@@ -1,10 +1,17 @@
 import React from 'react'
+import generateId from './generateId'
 import { Popup } from './Popup'
+import { DialogHead } from './DialogHead'
+import { DialogBody } from './DialogBody'
+import { Heading } from './Heading'
+import { CancelButton } from './CancelButton'
 import './Dialog.css'
 
 export class Dialog extends React.Component
 {
   _ref = React.createRef()
+
+  _headingId = this.props.title && generateId()
 
   render() {
     return (
@@ -21,11 +28,21 @@ export class Dialog extends React.Component
           role="dialog"
           aria-modal={ this.props.modal }
           aria-hidden={ this.props.hidden }
+          aria-labelledby={ this._headingId }
           onKeyDown={ this.onKeyDown }
           ref={ this._ref }
-        >
-          { this.props.children }
-        </div>
+        >{
+          !this.props.title? this.props.children :
+            (<>
+              <DialogHead>
+                <Heading id={ this._headingId }>{ this.props.title }</Heading>
+                <CancelButton/>
+              </DialogHead>
+              <DialogBody>
+                { this.props.children }
+              </DialogBody>
+            </>)
+        }</div>
       </Popup>
     )
   }
