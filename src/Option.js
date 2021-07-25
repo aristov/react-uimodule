@@ -7,6 +7,8 @@ export class Option extends React.Component
     active : false,
   }
 
+  elem = React.createRef()
+
   render() {
     return (
       <div
@@ -18,6 +20,7 @@ export class Option extends React.Component
         onMouseDown={ this.onMouseDown }
         onMouseLeave={ this.onMouseLeave }
         onMouseUp={ this.onMouseUp }
+        ref={ this.elem }
       >
         { this.props.label || this.props.children }
       </div>
@@ -44,5 +47,9 @@ export class Option extends React.Component
     if(!this.props.disabled && this.state.active) {
       this.setState({ active : false })
     }
+  }
+
+  get node() {
+    return this.elem.current
   }
 }

@@ -14,17 +14,15 @@ function PopupSimpleExample() {
         onClick={ () => setHidden(!hidden) }
         ref={ getAnchor }
       >
-        Open simple popup
+        Open popup
       </Button>
-      { anchor && (
-        <Popup
-          hidden={ hidden }
-          anchor={ anchor }
-          onCancelEvent={ () => setHidden(true) }
-        >
-          <Button onClick={ () => setHidden(true) }>Close the popup</Button>
-        </Popup>
-      ) }
+      <Popup
+        hidden={ !anchor || hidden }
+        anchor={ anchor }
+        onCancelEvent={ () => setHidden(true) }
+      >
+        <Button onClick={ () => setHidden(true) }>Close the popup</Button>
+      </Popup>
     </>
   )
 }
@@ -37,21 +35,18 @@ function PopupModalExample() {
     <>
       <Button
         onClick={ () => setExpanded(!expanded) }
-        aria-expanded={ expanded }
         ref={ getAnchor }
       >
         Open modal popup
       </Button>
-      { anchor && (
-        <Popup
-          modal
-          hidden={ !expanded }
-          anchor={ anchor }
-          onCancelEvent={ e => e.type === 'focusin' || setExpanded(false) }
-        >
-          <Button onClick={ () => setExpanded(false) }>Close the popup</Button>
-        </Popup>
-      ) }
+      <Popup
+        modal
+        hidden={ !anchor || !expanded }
+        anchor={ anchor }
+        onCancelEvent={ e => e.type === 'focusin' || setExpanded(false) }
+      >
+        <Button onClick={ () => setExpanded(false) }>Close the popup</Button>
+      </Popup>
     </>
   )
 }

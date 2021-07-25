@@ -13,7 +13,6 @@ function DialogSimpleExample() {
   return (
     <>
       <Button
-        expanded={ expanded }
         onClick={ () => setExpanded(!expanded) }
         ref={ getAnchor }
       >
@@ -39,7 +38,6 @@ function DialogModalExample() {
   return (
     <>
       <Button
-        expanded={ !hidden }
         onClick={ () => setHidden(!hidden) }
         ref={ getAnchor }
       >

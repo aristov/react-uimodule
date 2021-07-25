@@ -3,14 +3,14 @@ import './DialogBody.css'
 
 export class DialogBody extends React.Component
 {
-  _ref = React.createRef()
+  elem = React.createRef()
 
   render() {
     return (
       <div
         className="DialogBody"
         onScroll={ this.onScroll }
-        ref={ this._ref }
+        ref={ this.elem }
       >
         { this.props.children }
       </div>
@@ -18,6 +18,10 @@ export class DialogBody extends React.Component
   }
 
   onScroll = () => {
-    this._ref.current.classList.toggle('scrolled', !!this._ref.current.scrollTop)
+    this.elem.current.classList.toggle('scrolled', !!this.elem.current.scrollTop)
+  }
+
+  get node() {
+    return this.elem.current
   }
 }

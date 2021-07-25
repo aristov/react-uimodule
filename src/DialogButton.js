@@ -6,14 +6,18 @@ import './DialogButton.css'
 export class DialogButton extends React.Component
 {
   state = {
+    rendered : false,
     expanded : false,
   }
 
-  node = null
+  elem = React.createRef()
 
-  setNode = node => this.node = node
+  getElem = current => {
+    this.elem.current = current
+    this.state.rendered || this.setState({ rendered : true })
+  }
 
-  _dialogId = generateId()
+  dialogId = generateId()
 
   render() {
     return (
@@ -21,15 +25,15 @@ export class DialogButton extends React.Component
         <Button
           { ...this.props }
           classList={ [this.props.classList, 'DialogButton'] }
-          controls={ this._dialogId }
+          controls={ this.dialogId }
           hasPopup="dialog"
           expanded={ this.state.expanded }
           onClick={ this.onClick }
-          ref={ this.setNode }
+          ref={ this.getElem }
         />
         {
-          this.node && this.props.dialog({
-            id : this._dialogId,
+          this.state.rendered && this.props.dialog({
+            id : this.dialogId,
             hidden : !this.state.expanded,
             anchor : this.node,
             onCancelEvent : this.props.onCancelEvent || this.onCancelEvent
@@ -45,5 +49,9 @@ export class DialogButton extends React.Component
 
   onCancelEvent = () => {
     this.setState({ expanded : false })
+  }
+
+  get node() {
+    return this.elem.current?.node
   }
 }

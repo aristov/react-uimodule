@@ -9,17 +9,17 @@ export const CancelContext = React.createContext()
 
 export class Popup extends React.Component
 {
-  elem = React.createRef()
-
-  _position = [null, null]
-
-  _closeTimer = null
-
-  _positionTimer = null
-
   state = {
     hidden : true,
   }
+
+  elem = React.createRef()
+
+  position = [null, null]
+
+  closeTimer = null
+
+  positionTimer = null
 
   render() {
     const { props, state } = this
@@ -61,8 +61,8 @@ export class Popup extends React.Component
   }
 
   componentWillUnmount() {
-    clearTimeout(this._closeTimer)
-    this._closeTimer = null
+    clearTimeout(this.closeTimer)
+    this.closeTimer = null
     this.clearHandlers()
   }
 
@@ -73,7 +73,7 @@ export class Popup extends React.Component
 
   close() {
     const duration = getMaxTransitionDuration(this.elem.current)
-    this._closeTimer = setTimeout(this.hide, duration)
+    this.closeTimer = setTimeout(this.hide, duration)
     this.clearHandlers()
     if(this.props.modal || this.elem.current.contains(document.activeElement)) {
       this.anchor?.focus()
@@ -81,8 +81,8 @@ export class Popup extends React.Component
   }
 
   hide = () => {
-    clearTimeout(this._closeTimer)
-    this._closeTimer = null
+    clearTimeout(this.closeTimer)
+    this.closeTimer = null
     if(!this.elem.current || this.state.hidden) {
       return
     }
@@ -109,13 +109,13 @@ export class Popup extends React.Component
     }
     document.removeEventListener('scroll', this.onDocScroll, true)
     window.removeEventListener('resize', this.onWinResize)
-    clearTimeout(this._positionTimer)
-    this._positionTimer = null
+    clearTimeout(this.positionTimer)
+    this.positionTimer = null
   }
 
   updatePositionTick = (debounce = null) => {
-    clearTimeout(this._positionTimer)
-    this._positionTimer = setTimeout(this.updatePositionTick, debounce || INTERVAL)
+    clearTimeout(this.positionTimer)
+    this.positionTimer = setTimeout(this.updatePositionTick, debounce || INTERVAL)
     debounce || this.updatePosition()
   }
 
@@ -129,7 +129,7 @@ export class Popup extends React.Component
     style.transition = null
     if(this.props.direction === 'none') {
       node.dataset.direction = 'none'
-      this._position = [style.top = null, style.left = null]
+      this.position = [style.top = null, style.left = null]
       return
     }
     const rectA = this.anchor.getBoundingClientRect()
@@ -146,7 +146,7 @@ export class Popup extends React.Component
     node.dataset.direction = position? direction : 'auto'
     style.top = Math.min(Math.max(top, 0), window.innerHeight - rectP.height) + 'px'
     style.left = Math.min(Math.max(left, 0), window.innerWidth - rectP.width) + 'px'
-    this._position = [rectA.top, rectA.left]
+    this.position = [rectA.top, rectA.left]
   }
 
   onKeyDown = e => {
@@ -203,12 +203,12 @@ export class Popup extends React.Component
     }
     const rectA = this.anchor.getBoundingClientRect()
     const rectP = this.elem.current.getBoundingClientRect()
-    const [top, left] = this._position
+    const [top, left] = this.position
     const style = this.elem.current.style
     style.transition = 'none'
     style.top = rectA.top + rectP.top - top + 'px'
     style.left = rectA.left + rectP.left - left + 'px'
-    this._position = [rectA.top, rectA.left]
+    this.position = [rectA.top, rectA.left]
     this.updatePositionTick(DEBOUNCE)
   }
 
@@ -219,10 +219,6 @@ export class Popup extends React.Component
     this.updatePositionTick(DEBOUNCE)
   }
 
-  get node() {
-    return this.elem.current
-  }
-
   get anchor() {
     let anchor = this.props.anchor
     let result = anchor
@@ -230,15 +226,11 @@ export class Popup extends React.Component
       if(isAnchorInterface(result)) {
         return result
       }
-      result = anchor.current?.elem?.node || anchor.current?.elem || anchor.current
+      result = anchor.current?.elem?.current || anchor.current?.elem || anchor.current
       if(result && isAnchorInterface(result)) {
         return result
       }
       result = anchor.elem?.current || anchor.elem
-      if(result && isAnchorInterface(result)) {
-        return result
-      }
-      result = anchor.elem?.node || anchor.elem
       if(result && isAnchorInterface(result)) {
         return result
       }
@@ -248,6 +240,10 @@ export class Popup extends React.Component
       }
     }
     return null
+  }
+
+  get node() {
+    return this.elem.current
   }
 
   static defaultProps = {

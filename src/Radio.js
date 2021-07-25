@@ -9,6 +9,8 @@ export class Radio extends React.Component
     active : false,
   }
 
+  elem = React.createRef()
+
   render() {
     const classList = [
       'Radio Widget',
@@ -25,6 +27,7 @@ export class Radio extends React.Component
         onMouseDown={ this.onMouseDown }
         onMouseLeave={ this.onMouseLeave }
         onMouseUp={ this.onMouseUp }
+        ref={ this.elem }
       >
         <Control/>
         { this.props.label && <Label>{ this.props.label }</Label> }
@@ -52,5 +55,9 @@ export class Radio extends React.Component
     if(!this.props.disabled && this.state.active) {
       this.setState({ active : false })
     }
+  }
+
+  get node() {
+    return this.elem.current
   }
 }

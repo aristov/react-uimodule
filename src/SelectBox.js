@@ -9,17 +9,22 @@ import './SelectBox.css'
 export class SelectBox extends React.Component
 {
   state = {
+    rendered : false,
     active : false,
     expanded : false,
     value : this.props.defaultValue || null,
-    anchor : null,
   }
 
-  setAnchor = anchor => this.state.anchor || this.setState({ anchor })
+  elem = React.createRef()
 
-  _listBox = React.createRef()
+  getElem = current => {
+    this.elem.current = current
+    this.state.rendered || this.setState({ rendered : true })
+  }
 
-  _listBoxId = generateId()
+  listBox = React.createRef()
+
+  listBoxId = generateId()
 
   render() {
     const classList = ['SelectBox Widget', this.state.active && 'active']
@@ -32,34 +37,34 @@ export class SelectBox extends React.Component
           tabIndex={ this.props.disabled? null : 0 }
           role="combobox"
           aria-haspopup="listbox"
-          aria-controls={ this._listBoxId }
+          aria-controls={ this.listBoxId }
           aria-expanded={ this.state.expanded }
           aria-required={ this.props.required }
           aria-disabled={ this.props.disabled }
           onClick={ this.onClick }
           onKeyDown={ this.onKeyDown }
           onKeyUp={ this.onKeyUp }
-          ref={ this.setAnchor }
+          ref={ this.getElem }
         >
           { this.props.label && <Label>{ this.props.label }</Label> }
           <Control>
             <div className="Inner">{ option?.label || ' ' }</div>
           </Control>
         </div>
-        { this.state.anchor && (
+        { this.state.rendered && (
           <Popup
             hidden={ !this.state.expanded }
             anchor={ this.node }
             onCancelEvent={ this.activate }
           >
             <ListBox
-              id={ this._listBoxId }
+              id={ this.listBoxId }
               tabIndex={ null }
               options={ this.props.options }
               value={ value }
               onClick={ this.onListBoxClick }
               onChange={ this.onListBoxChange }
-              ref={ this._listBox }
+              ref={ this.listBox }
             />
           </Popup>
         ) }
@@ -88,7 +93,7 @@ export class SelectBox extends React.Component
       return
     }
     if(this.state.expanded) {
-      this._listBox.current.onKeyDown(e)
+      this.listBox.current.onKeyDown(e)
       return
     }
     e.preventDefault()
@@ -157,6 +162,6 @@ export class SelectBox extends React.Component
   }
 
   get node() {
-    return this.state.anchor
+    return this.elem.current
   }
 }

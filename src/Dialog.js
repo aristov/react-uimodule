@@ -9,9 +9,9 @@ import './Dialog.css'
 
 export class Dialog extends React.Component
 {
-  _ref = React.createRef()
+  elem = React.createRef()
 
-  _headingId = this.props.title && generateId()
+  headingId = this.props.title && generateId()
 
   render() {
     return (
@@ -28,14 +28,14 @@ export class Dialog extends React.Component
           role="dialog"
           aria-modal={ this.props.modal }
           aria-hidden={ this.props.hidden }
-          aria-labelledby={ this._headingId }
+          aria-labelledby={ this.headingId }
           onKeyDown={ this.onKeyDown }
-          ref={ this._ref }
+          ref={ this.elem }
         >{
           !this.props.title? this.props.children :
             (<>
               <DialogHead>
-                <Heading id={ this._headingId }>{ this.props.title }</Heading>
+                <Heading id={ this.headingId }>{ this.props.title }</Heading>
                 <CancelButton/>
               </DialogHead>
               <DialogBody>
@@ -132,6 +132,6 @@ export class Dialog extends React.Component
   }
 
   get node() {
-    return this._ref.current
+    return this.elem.current
   }
 }

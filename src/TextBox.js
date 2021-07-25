@@ -9,8 +9,9 @@ export class TextBox extends React.Component
     value : this.props.defaultValue || ''
   }
 
-  _ref = React.createRef()
-  _edit = React.createRef()
+  elem = React.createRef()
+
+  edit = React.createRef()
 
   render() {
     return (
@@ -19,7 +20,7 @@ export class TextBox extends React.Component
         tabIndex={ this.props.disabled? null : -1 }
         aria-disabled={ this.props.disabled }
         onFocus={ this.onFocus }
-        ref={ this._ref }
+        ref={ this.elem }
       >
         { this.props.label && <Label>{ this.props.label }</Label> }
         <Control>
@@ -32,7 +33,7 @@ export class TextBox extends React.Component
             onInput={ this.onInput }
             onKeyDown={ this.onKeyDown }
             onPaste={ this.onPaste }
-            ref={ this._edit }
+            ref={ this.edit }
           />
         </Control>
       </div>
@@ -40,15 +41,15 @@ export class TextBox extends React.Component
   }
 
   componentDidMount() {
-    this._edit.current.textContent = this.props.value ?? this.state.value
-    this._ref.current.addEventListener('change', this.onChange)
+    this.edit.current.textContent = this.props.value ?? this.state.value
+    this.node.addEventListener('change', this.onChange)
   }
 
   componentDidUpdate() {
     if(typeof this.props.value === 'undefined') {
       return
     }
-    const node = this._edit.current
+    const node = this.edit.current
     node.textContent = this.props.value
     if(this.props.onChange || !node.firstChild || node !== document.activeElement) {
       return
@@ -59,20 +60,20 @@ export class TextBox extends React.Component
   }
 
   componentWillUnmount() {
-    this._ref.current.removeEventListener('change', this.onChange)
+    this.node.removeEventListener('change', this.onChange)
   }
 
   onFocus = () => {
-    this._edit.current.focus()
+    this.edit.current.focus()
   }
 
   onInput = e => {
     this.setState({ value : e.target.textContent })
-    this._ref.current.dispatchEvent(new Event('change', { bubbles : true }))
+    this.node.dispatchEvent(new Event('change', { bubbles : true }))
   }
 
   onChange = e => {
-    e.target.value = this._edit.current.textContent
+    e.target.value = this.edit.current.textContent
     this.props.onChange?.(e)
   }
 
@@ -105,7 +106,7 @@ export class TextBox extends React.Component
       return
     }
     const data = e.clipboardData.getData('text')
-    const node = this._edit.current
+    const node = this.edit.current
     const text = node.textContent
     const selection = getSelection()
     const startOffset = Math.min(selection.anchorOffset, selection.focusOffset)
@@ -115,5 +116,13 @@ export class TextBox extends React.Component
     node.textContent = beforeText + data + afterText
     selection.collapse(node.firstChild, beforeText.length + data.length)
     node.dispatchEvent(new InputEvent('input', { bubbles : true }))
+  }
+
+  get node() {
+    return this.elem.current
+  }
+
+  get value() {
+    return this.node.textContent
   }
 }
