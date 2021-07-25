@@ -52,6 +52,7 @@ export class Popup extends React.Component
     setImmediate(() => this.setState({ hidden : false }))
     document.addEventListener('click', this.onDocClick)
     document.addEventListener('focusin', this.onDocFocusIn)
+    document.addEventListener('keydown', this.onDocKeyDown)
     document.addEventListener('scroll', this.onDocScroll, true)
     window.addEventListener('resize', this.onWinResize)
   }
@@ -83,6 +84,7 @@ export class Popup extends React.Component
     }
     document.removeEventListener('click', this.onDocClick)
     document.removeEventListener('focusin', this.onDocFocusIn)
+    document.removeEventListener('keydown', this.onDocKeyDown)
     document.removeEventListener('scroll', this.onDocScroll, true)
     window.removeEventListener('resize', this.onWinResize)
   }
@@ -158,6 +160,15 @@ export class Popup extends React.Component
       return
     }
     this.props.onCancelEvent?.(e)
+  }
+
+  onDocKeyDown = e => {
+    if(e.target === document.body || this.props.anchor?.node.contains(e.target)) {
+      if(e.code === 'Escape') {
+        e.stopPropagation()
+        this.props.onCancelEvent?.(e)
+      }
+    }
   }
 
   onDocScroll = e => {
