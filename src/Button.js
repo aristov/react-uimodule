@@ -26,6 +26,9 @@ export class Button extends React.Component
         role="button"
         aria-pressed={ this.props.pressed ?? this.state.pressed }
         aria-disabled={ this.props.disabled }
+        aria-controls={ this.props.controls }
+        aria-haspopup={ this.props.hasPopup }
+        aria-expanded={ this.props.expanded }
         onBlur={ this.onBlur }
         onClick={ this.onClick }
         onMouseDown={ this.onMouseDown }
@@ -36,7 +39,7 @@ export class Button extends React.Component
         ref={ this._ref }
       >
         <Control>
-          { this.props.children }
+          { this.props.label || this.props.children }
         </Control>
       </div>
     )
