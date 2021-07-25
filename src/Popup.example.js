@@ -1,47 +1,56 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Example } from './Example'
 import { Heading } from './Heading'
 import { Button } from './Button'
 import { Popup } from './Popup'
 
 function PopupSimpleExample() {
-  const button = useRef(null)
+  const [anchor, setAnchor] = useState(null)
   const [hidden, setHidden] = useState(true)
+  const ref = useCallback(elem => elem === null || setAnchor(elem), [])
   return (
     <>
-      <Button onClick={ () => setHidden(!hidden) } ref={ button }>
+      <Button
+        onClick={ () => setHidden(!hidden) }
+        ref={ ref }
+      >
         Open simple popup
       </Button>
-      <Popup
-        hidden={ hidden }
-        anchor={ button.current }
-        onCancelEvent={ () => setHidden(true) }
-      >
-        <Button onClick={ () => setHidden(true) }>Close the popup</Button>
-      </Popup>
+      { anchor && (
+        <Popup
+          hidden={ hidden }
+          anchor={ anchor }
+          onCancelEvent={ () => setHidden(true) }
+        >
+          <Button onClick={ () => setHidden(true) }>Close the popup</Button>
+        </Popup>
+      ) }
     </>
   )
 }
 
 function PopupModalExample() {
-  const button = useRef(null)
+  const [anchor, setAnchor] = useState(null)
   const [hidden, setHidden] = useState(true)
+  const ref = useCallback(elem => elem === null || setAnchor(elem), [])
   return (
     <>
       <Button
         onClick={ () => setHidden(!hidden) }
-        ref={ button }
+        ref={ ref }
       >
         Open modal popup
       </Button>
-      <Popup
-        modal
-        hidden={ hidden }
-        anchor={ button.current }
-        onCancelEvent={ () => setHidden(true) }
-      >
-        <Button onClick={ () => setHidden(true) }>Close the popup</Button>
-      </Popup>
+      { anchor && (
+        <Popup
+          modal
+          hidden={ hidden }
+          anchor={ anchor }
+          onCancelEvent={ () => setHidden(true) }
+        >
+          <Button onClick={ () => setHidden(true) }>Close the popup</Button>
+        </Popup>
+      ) }
     </>
   )
 }
