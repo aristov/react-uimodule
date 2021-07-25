@@ -16,16 +16,7 @@ export default function DialogButtonExample() {
       <DialogButton
         label="Open dialog"
         dialog={ props => (
-          <Dialog title="Hello!" { ...props }>
-            <TextBox label="Say something"/>
-            <CloseButton>Close</CloseButton>
-          </Dialog>
-        ) }
-      />
-      <DialogButton
-        label="Open modal dialog"
-        dialog={ props => (
-          <Dialog modal { ...props }>
+          <Dialog { ...props }>
             <DialogHead>
               <Heading>Hello!</Heading>
               <CancelButton/>
@@ -34,6 +25,23 @@ export default function DialogButtonExample() {
               <TextBox label="Say something"/>
               <CloseButton>Close</CloseButton>
             </DialogBody>
+          </Dialog>
+        ) }
+      />
+      <DialogButton
+        label="Open modal dialog"
+        dialog={ props => (
+          <Dialog title="Hello!" modal { ...props }>
+            <DialogButton
+              label="Open nested dialog"
+              dialog={ props => (
+                <Dialog title="Hello!" { ...props }>
+                  <TextBox label="Say something"/>
+                  <CloseButton>Close</CloseButton>
+                </Dialog>
+              ) }
+            />
+            <CloseButton>Close</CloseButton>
           </Dialog>
         ) }
       />

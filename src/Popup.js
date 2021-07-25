@@ -1,9 +1,10 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import debounce from 'lodash/debounce'
 import './Popup.css'
 
 const POSITION_UPDATE_DEBOUNCE = 200
-const POSITION_UPDATE_INTERVAL = 1000
+const POSITION_UPDATE_INTERVAL = 500
 
 export const CancelContext = React.createContext(() => {})
 
@@ -13,7 +14,7 @@ export class Popup extends React.Component
 
   _position = [null, null]
 
-  _timeoutId = null
+  _positionTimeoutId = null
 
   state = {
     hidden : true,
@@ -24,7 +25,7 @@ export class Popup extends React.Component
     if(props.hidden && state.hidden) {
       return null
     }
-    return (
+    const layout = (
       <div
         className={ ['Popup', props.modal && 'modal'].filter(Boolean).join(' ') }
         aria-hidden={ !props.hidden && !state.hidden? null : props.hidden }
@@ -38,6 +39,7 @@ export class Popup extends React.Component
         </div>
       </div>
     )
+    return props.modal? ReactDOM.createPortal(layout, document.body) : layout
   }
 
   componentDidUpdate() {
@@ -49,78 +51,98 @@ export class Popup extends React.Component
 
   show() {
     this.updatePosition()
-    setImmediate(() => this.setState({ hidden : false }))
-    document.addEventListener('click', this.onDocClick)
-    document.addEventListener('focusin', this.onDocFocusIn)
-    document.addEventListener('keydown', this.onDocKeyDown)
-    document.addEventListener('scroll', this.onDocScroll, true)
-    window.addEventListener('resize', this.onWinResize)
+    setImmediate(() => this.setState({ hidden : false }, this.setHandlers))
   }
 
   close() {
-    const handler = this.node.ontransitionend = () => {
-      if(this.hidden) {
+    const node = this.node
+    const handler = node.ontransitionend = () => {
+      if(!this.node) {
         return
       }
       clearTimeout(timeoutId)
-      this.node.ontransitionend = null
+      node.ontransitionend = null
       this.setState({ hidden : true })
     }
     const timeoutId = setTimeout(handler, Math.max(...this.durations))
-    if(this.props.modal || this.node.contains(document.activeElement)) {
-      this.props.anchor?.node.focus()
+    this.clearHandlers()
+    if(this.props.modal || node.contains(document.activeElement)) {
+      this.props.anchor?.node?.focus()
     }
-    this.removeHandlers()
   }
 
   componentWillUnmount() {
-    this.removeHandlers()
+    this.clearHandlers()
   }
 
-  removeHandlers() {
-    if(this._timeoutId) {
-      clearTimeout(this._timeoutId)
-      this._timeoutId = null
+  setHandlers = () => {
+    document.addEventListener('click', this.onDocClick)
+    document.addEventListener('focusin', this.onDocFocusIn)
+    document.addEventListener('keydown', this.onDocKeyDown, true)
+    if(this.props.modal) {
+      return
     }
+    document.addEventListener('scroll', this.onDocScroll, true)
+    window.addEventListener('resize', this.onWinResize)
+    this.setPositionTimeout()
+  }
+
+  clearHandlers = () => {
     document.removeEventListener('click', this.onDocClick)
     document.removeEventListener('focusin', this.onDocFocusIn)
     document.removeEventListener('keydown', this.onDocKeyDown)
+    if(this.props.modal) {
+      return
+    }
     document.removeEventListener('scroll', this.onDocScroll, true)
     window.removeEventListener('resize', this.onWinResize)
+    this.clearPositionTimeout()
+  }
+
+  setPositionTimeout = () => {
+    this._positionTimeoutId = setTimeout(() => {
+      this.updatePosition()
+      this.setPositionTimeout()
+    }, POSITION_UPDATE_INTERVAL)
+  }
+
+  clearPositionTimeout = () => {
+    clearTimeout(this._positionTimeoutId)
+    this._positionTimeoutId = null
   }
 
   updatePosition = () => {
+    if(this.props.hidden || !this.props.anchor) {
+      return
+    }
     const direction = this.direction
-    if(direction === 'none' || !this.props.anchor || this.props.modal || this.hidden) {
+    if(direction === 'none') {
       return this.setPosition(this._position = [null, null])
     }
-    const aRect = this.props.anchor.node.getBoundingClientRect()
     const pRect = this.node.getBoundingClientRect()
+    const aRect = this.props.anchor.node.getBoundingClientRect()
     const { alternatives, fallback } = directions[direction]
     let item, position
-    if(!this._timeoutId) {
-      this._timeoutId = setTimeout(() => this.updatePosition(), POSITION_UPDATE_INTERVAL)
-    }
     for(item of [direction, ...alternatives]) {
       position = directions[item].handler(aRect, pRect)
       if(position) {
-        this.setPosition(position)
-        this._position = [aRect.top, aRect.left]
-        return
+        break
       }
     }
-    this.setPosition(fallback())
+    this.setPosition(position || fallback())
     this._position = [aRect.top, aRect.left]
+    console.log('updatePosition')
   }
 
-  updatePositionDebounce = debounce(this.updatePosition, POSITION_UPDATE_DEBOUNCE)
+  debouncePositionTimeout = debounce(this.setPositionTimeout, POSITION_UPDATE_DEBOUNCE)
 
   /**
    * @param {array} position
    */
   setPosition([top, left]) {
-    const style = this.node.style
-    const rect = this.node.getBoundingClientRect()
+    const node = this.node
+    const style = node.style
+    const rect = node.getBoundingClientRect()
     style.transition = null
     style.top = top === null?
       null :
@@ -131,90 +153,95 @@ export class Popup extends React.Component
   }
 
   onKeyDown = e => {
-    if(e.code === 'Escape') {
-      e.stopPropagation()
-      this.props.onCancelEvent?.(e)
+    if(this.props.hidden || e.code !== 'Escape') {
+      return
     }
+    e.stopPropagation()
+    this.props.onCancelEvent?.(e)
   }
 
   onDocClick = e => {
-    if(this.hidden) {
+    if(this.props.hidden) {
       return
     }
     const node = this.node
     if(e.target !== node && node.contains(e.target)) {
       return
     }
-    if(this.props.anchor?.node.contains(e.target)) {
+    if(this.props.anchor?.node?.contains(e.target)) {
       return
     }
     this.props.onCancelEvent?.(e)
   }
 
   onDocFocusIn = e => {
-    if(this.node.contains(e.target) || this.props.anchor?.node.contains(e.target)) {
+    if(this.props.hidden) {
+      return
+    }
+    const node = this.node
+    if(node.contains(e.target) || this.props.anchor?.node?.contains(e.target)) {
       return
     }
     const popup = e.target.closest('.Popup')
-    if(popup && popup.classList.contains('modal') && !popup.contains(this.node)) {
+    if(popup && popup.classList.contains('modal') && !popup.contains(node)) {
       return
     }
     this.props.onCancelEvent?.(e)
   }
 
   onDocKeyDown = e => {
-    if(e.target === document.body || this.props.anchor?.node.contains(e.target)) {
-      if(e.code === 'Escape') {
-        e.stopPropagation()
-        this.props.onCancelEvent?.(e)
-      }
+    if(this.props.hidden || e.code !== 'Escape') {
+      return
+    }
+    if(e.target === document.body || this.props.anchor?.node?.contains(e.target)) {
+      e.stopPropagation()
+      this.props.onCancelEvent?.(e)
     }
   }
 
   onDocScroll = e => {
-    if(!this.props.anchor || this.props.modal || this.hidden) {
+    if(this.props.hidden || this.props.modal || !this.props.anchor) {
       return
     }
-    if(this.direction === 'none' || !e.target.contains(this.node)) {
+    const node = this.node
+    if(this.direction === 'none' || !e.target.contains(node)) {
       return
     }
-    const style = this.node.style
-    const popup = this.node.getBoundingClientRect()
+    const style = node.style
+    const popup = node.getBoundingClientRect()
     const anchor = this.props.anchor.node.getBoundingClientRect()
     const [top, left] = this._position
-    clearTimeout(this._timeoutId)
     style.transition = 'none'
     style.top = popup.top + anchor.top - top + 'px'
     style.left = popup.left + anchor.left - left + 'px'
     this._position = [anchor.top, anchor.left]
-    this.updatePositionDebounce()
+    this.clearPositionTimeout()
+    this.debouncePositionTimeout()
   }
 
   onWinResize = () => {
-    this.updatePositionDebounce()
+    this.clearPositionTimeout()
+    this.debouncePositionTimeout()
   }
 
   /**
    * @return {string}
    */
   get direction() {
-    return this.props.direction || 'bottom-right'
+    return this.props.anchor? this.props.direction || 'bottom-right' : 'none'
   }
 
   /**
    * @returns {number[]}
    */
   get durations() {
-    if(this.hidden) {
+    const node = this.node
+    if(!node) {
       return [0]
     }
-    const style = getComputedStyle(this.node)
+    const style = getComputedStyle(node)
     const durations = style.transitionDuration.split(', ')
     return durations.map(duration => parseFloat(duration) * 1000)
-  }
-
-  get hidden() {
-    return this.props.hidden && this.state.hidden
   }
 
   get node() {
