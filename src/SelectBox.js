@@ -49,7 +49,7 @@ export class SelectBox extends React.Component
         { this.state.anchor && (
           <Popup
             hidden={ !this.state.expanded }
-            anchor={ this }
+            anchor={ this.node }
             onCancelEvent={ this.activate }
           >
             <ListBox

@@ -9,14 +9,14 @@ export class Button extends React.Component
     pressed : this.props.defaultPressed,
   }
 
-  _ref = React.createRef()
+  elem = React.createRef()
 
   render() {
     const tabIndex = this.props.disabled? null : this.props.tabIndex
     const classList = [
       this.props.classList,
       'Button Widget',
-      this.state.active && 'active'
+      this.state.active && 'active',
     ]
     return (
       <div
@@ -36,7 +36,7 @@ export class Button extends React.Component
         onMouseUp={ this.onMouseUp }
         onKeyDown={ this.onKeyDown }
         onKeyUp={ this.onKeyUp }
-        ref={ this._ref }
+        ref={ this.elem }
       >
         <Control>
           { this.props.label || this.props.children }
@@ -103,10 +103,10 @@ export class Button extends React.Component
 
   onKeyUp_Space() {
     this.setState({ active : false })
-    this._ref.current.click()
+    this.elem.current.click()
   }
 
   get node() {
-    return this._ref.current
+    return this.elem.current
   }
 }

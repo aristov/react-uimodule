@@ -7,10 +7,11 @@ export class DialogButton extends React.Component
 {
   state = {
     expanded : false,
-    anchor : null,
   }
 
-  setAnchor = anchor => this.state.anchor || this.setState({ anchor })
+  node = null
+
+  setNode = node => this.node = node
 
   _dialogId = generateId()
 
@@ -24,13 +25,13 @@ export class DialogButton extends React.Component
           hasPopup="dialog"
           expanded={ this.state.expanded }
           onClick={ this.onClick }
-          ref={ this.setAnchor }
+          ref={ this.setNode }
         />
         {
-          this.state.anchor && this.props.dialog({
+          this.node && this.props.dialog({
             id : this._dialogId,
             hidden : !this.state.expanded,
-            anchor : this.state.anchor,
+            anchor : this.node,
             onCancelEvent : this.props.onCancelEvent || this.onCancelEvent
           })
         }

@@ -5,14 +5,14 @@ import { Button } from './Button'
 import { Popup } from './Popup'
 
 function PopupSimpleExample() {
-  const [anchor, setAnchor] = useState(null)
   const [hidden, setHidden] = useState(true)
-  const ref = useCallback(elem => elem === null || setAnchor(elem), [])
+  const [anchor, setAnchor] = useState(null)
+  const getAnchor = useCallback(elem => elem === null || setAnchor(elem), [])
   return (
     <>
       <Button
         onClick={ () => setHidden(!hidden) }
-        ref={ ref }
+        ref={ getAnchor }
       >
         Open simple popup
       </Button>
@@ -30,25 +30,26 @@ function PopupSimpleExample() {
 }
 
 function PopupModalExample() {
+  const [expanded, setExpanded] = useState(false)
   const [anchor, setAnchor] = useState(null)
-  const [hidden, setHidden] = useState(true)
-  const ref = useCallback(elem => elem === null || setAnchor(elem), [])
+  const getAnchor = useCallback(elem => elem === null || setAnchor(elem), [])
   return (
     <>
       <Button
-        onClick={ () => setHidden(!hidden) }
-        ref={ ref }
+        onClick={ () => setExpanded(!expanded) }
+        aria-expanded={ expanded }
+        ref={ getAnchor }
       >
         Open modal popup
       </Button>
       { anchor && (
         <Popup
           modal
-          hidden={ hidden }
+          hidden={ !expanded }
           anchor={ anchor }
-          onCancelEvent={ () => setHidden(true) }
+          onCancelEvent={ e => e.type === 'focusin' || setExpanded(false) }
         >
-          <Button onClick={ () => setHidden(true) }>Close the popup</Button>
+          <Button onClick={ () => setExpanded(false) }>Close the popup</Button>
         </Popup>
       ) }
     </>
