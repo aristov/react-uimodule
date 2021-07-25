@@ -1,12 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import debounce from 'lodash/debounce'
 import './Popup.css'
 
-const POSITION_UPDATE_DEBOUNCE = 200
-const POSITION_UPDATE_INTERVAL = 500
+const DEBOUNCE = 200
+const INTERVAL = 1000
 
-export const CancelContext = React.createContext(() => {})
+export const CancelContext = React.createContext()
 
 export class Popup extends React.Component
 {
@@ -32,7 +31,7 @@ export class Popup extends React.Component
         className={ ['Popup', props.modal && 'modal'].filter(Boolean).join(' ') }
         aria-hidden={ !props.hidden && !state.hidden? null : props.hidden }
         onKeyDown={ this.onKeyDown }
-        onTransitionEnd={ props.hidden && !state.hidden? this.onTransitionEnd : null }
+        onTransitionEnd={ props.hidden && !state.hidden? this.hide : null }
         ref={ this.elem }
       >
         <div className="PopupContent">
@@ -46,37 +45,44 @@ export class Popup extends React.Component
   }
 
   componentDidMount() {
-    this.props.hidden || this.show()
+    this.props.hidden || this.open()
   }
 
   componentDidUpdate() {
     if(this.state.hidden) {
-      this.props.hidden || this.show()
+      this.props.hidden || this.open()
+      return
     }
-    else this.props.hidden && this.close()
+    if(this.props.hidden) {
+      this.close()
+      return
+    }
+    this.props.modal || this.updatePositionTick()
   }
 
   componentWillUnmount() {
-    this.clearHandlers()
     clearTimeout(this._closeTimer)
+    this._closeTimer = null
+    this.clearHandlers()
   }
 
-  show() {
-    this.props.modal || this.setPositionTimeout()
+  open() {
+    this.props.modal || this.updatePositionTick()
     setImmediate(() => this.setState({ hidden : false }, this.setHandlers))
   }
 
   close() {
     const duration = getMaxTransitionDuration(this.elem.current)
-    this._closeTimer = setTimeout(this.onTransitionEnd, duration)
+    this._closeTimer = setTimeout(this.hide, duration)
     this.clearHandlers()
     if(this.props.modal || this.elem.current.contains(document.activeElement)) {
       this.props.anchor?.node?.focus()
     }
   }
 
-  onTransitionEnd = () => {
+  hide = () => {
     clearTimeout(this._closeTimer)
+    this._closeTimer = null
     if(!this.elem.current || this.state.hidden) {
       return
     }
@@ -101,57 +107,46 @@ export class Popup extends React.Component
     if(this.props.modal) {
       return
     }
-    this.clearPositionTimeout()
     document.removeEventListener('scroll', this.onDocScroll, true)
     window.removeEventListener('resize', this.onWinResize)
-  }
-
-  setPositionTimeout = () => {
-    this.updatePosition()
-    this._positionTimer = setTimeout(this.setPositionTimeout, POSITION_UPDATE_INTERVAL)
-  }
-
-  clearPositionTimeout = () => {
     clearTimeout(this._positionTimer)
     this._positionTimer = null
   }
 
+  updatePositionTick = (debounce = null) => {
+    clearTimeout(this._positionTimer)
+    this._positionTimer = setTimeout(this.updatePositionTick, debounce || INTERVAL)
+    debounce || this.updatePosition()
+  }
+
   updatePosition = () => {
+    const node = this.elem.current
     if(this.props.hidden || !this.props.anchor) {
+      node.dataset.direction = 'none'
       return
     }
-    const direction = this.direction
-    if(direction === 'none') {
-      this.setPosition(this._position = [null, null])
+    const style = node.style
+    style.transition = null
+    if(this.props.direction === 'none') {
+      node.dataset.direction = 'none'
+      this._position = [style.top = null, style.left = null]
       return
     }
-    const pRect = this.elem.current.getBoundingClientRect()
-    const aRect = this.props.anchor.node.getBoundingClientRect()
-    const { alternatives, fallback } = directions[direction]
-    let item, position
-    for(item of [direction, ...alternatives]) {
-      position = directions[item].handler(aRect, pRect)
+    const rectA = this.props.anchor.node.getBoundingClientRect()
+    const rectP = node.getBoundingClientRect()
+    const { alternatives, fallback } = directions[this.props.direction]
+    let direction, position
+    for(direction of [this.props.direction, ...alternatives]) {
+      position = directions[direction].handler(rectA, rectP) || null
       if(position) {
         break
       }
     }
-    this.setPosition(position || fallback())
-    this._position = [aRect.top, aRect.left]
-  }
-
-  /**
-   * @param {array} position
-   */
-  setPosition([top, left]) {
-    const style = this.elem.current.style
-    const rect = this.elem.current.getBoundingClientRect()
-    style.transition = null
-    style.top = top === null?
-      null :
-      Math.min(Math.max(top, 0), window.innerHeight - rect.height) + 'px'
-    style.left = left === null?
-      null :
-      Math.min(Math.max(left, 0), window.innerWidth - rect.width) + 'px'
+    const [top, left] = position || fallback()
+    node.dataset.direction = position? direction : 'auto'
+    style.top = Math.min(Math.max(top, 0), window.innerHeight - rectP.height) + 'px'
+    style.left = Math.min(Math.max(left, 0), window.innerWidth - rectP.width) + 'px'
+    this._position = [rectA.top, rectA.left]
   }
 
   onKeyDown = e => {
@@ -200,40 +195,36 @@ export class Popup extends React.Component
   }
 
   onDocScroll = e => {
-    if(this.props.hidden || !this.props.anchor || this.direction === 'none') {
+    if(this.props.hidden || !this.props.anchor || this.props.direction === 'none') {
       return
     }
     if(!e.target.contains(this.elem.current)) {
       return
     }
-    const style = this.elem.current.style
-    const popup = this.elem.current.getBoundingClientRect()
-    const anchor = this.props.anchor.node.getBoundingClientRect()
+    const rectA = this.props.anchor.node.getBoundingClientRect()
+    const rectP = this.elem.current.getBoundingClientRect()
     const [top, left] = this._position
+    const style = this.elem.current.style
     style.transition = 'none'
-    style.top = popup.top + anchor.top - top + 'px'
-    style.left = popup.left + anchor.left - left + 'px'
-    this._position = [anchor.top, anchor.left]
-    this.clearPositionTimeout()
-    this.debouncePositionTimeout()
+    style.top = rectA.top + rectP.top - top + 'px'
+    style.left = rectA.left + rectP.left - left + 'px'
+    this._position = [rectA.top, rectA.left]
+    this.updatePositionTick(DEBOUNCE)
   }
 
   onWinResize = () => {
     if(this.props.hidden || !this.props.anchor) {
       return
     }
-    this.clearPositionTimeout()
-    this.debouncePositionTimeout()
-  }
-
-  debouncePositionTimeout = debounce(this.setPositionTimeout, POSITION_UPDATE_DEBOUNCE)
-
-  get direction() {
-    return this.props.anchor? this.props.direction || 'bottom-right' : 'none'
+    this.updatePositionTick(DEBOUNCE)
   }
 
   get node() {
     return this.elem.current
+  }
+
+  static defaultProps = {
+    direction : 'bottom-right'
   }
 }
 

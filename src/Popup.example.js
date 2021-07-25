@@ -24,20 +24,20 @@ function PopupSimpleExample() {
 }
 
 function PopupModalExample() {
-  const modalButton = useRef(null)
+  const button = useRef(null)
   const [hidden, setHidden] = useState(true)
   return (
     <>
       <Button
         onClick={ () => setHidden(!hidden) }
-        ref={ modalButton }
+        ref={ button }
       >
         Open modal popup
       </Button>
       <Popup
         modal
         hidden={ hidden }
-        anchor={ modalButton.current }
+        anchor={ button.current }
         onCancelEvent={ () => setHidden(true) }
       >
         <Button onClick={ () => setHidden(true) }>Close the popup</Button>
