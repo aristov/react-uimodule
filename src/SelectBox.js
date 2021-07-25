@@ -12,9 +12,10 @@ export class SelectBox extends React.Component
     active : false,
     expanded : false,
     value : this.props.defaultValue || null,
+    anchor : null,
   }
 
-  _ref = React.createRef()
+  setAnchor = anchor => this.state.anchor || this.setState({ anchor })
 
   _listBox = React.createRef()
 
@@ -38,28 +39,30 @@ export class SelectBox extends React.Component
           onClick={ this.onClick }
           onKeyDown={ this.onKeyDown }
           onKeyUp={ this.onKeyUp }
-          ref={ this._ref }
+          ref={ this.setAnchor }
         >
           { this.props.label && <Label>{ this.props.label }</Label> }
           <Control>
             <div className="Inner">{ option?.label || ' ' }</div>
           </Control>
         </div>
-        <Popup
-          hidden={ !this.state.expanded }
-          anchor={ this }
-          onCancelEvent={ this.activate }
-        >
-          <ListBox
-            id={ this._listBoxId }
-            tabIndex={ null }
-            options={ this.props.options }
-            value={ value }
-            onClick={ this.onListBoxClick }
-            onChange={ this.onListBoxChange }
-            ref={ this._listBox }
-          />
-        </Popup>
+        { this.state.anchor && (
+          <Popup
+            hidden={ !this.state.expanded }
+            anchor={ this }
+            onCancelEvent={ this.activate }
+          >
+            <ListBox
+              id={ this._listBoxId }
+              tabIndex={ null }
+              options={ this.props.options }
+              value={ value }
+              onClick={ this.onListBoxClick }
+              onChange={ this.onListBoxChange }
+              ref={ this._listBox }
+            />
+          </Popup>
+        ) }
       </>
     )
   }
@@ -154,6 +157,6 @@ export class SelectBox extends React.Component
   }
 
   get node() {
-    return this._ref.current
+    return this.state.anchor
   }
 }

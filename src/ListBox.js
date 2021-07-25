@@ -30,18 +30,16 @@ export class ListBox extends React.Component
       >
         { this.props.label && <Label>{ this.props.label }</Label> }
         <Control>{
-          this.props.options.map(option => {
-            return (
-              <Option
-                label={ option.label || option.value }
-                key={ option.value || option.label }
-                value={ option.value || option.label }
-                selected={ option.value === value }
-                disabled={ this.props.disabled }
-                updateValue={ this.updateValue }
-              />
-            )
-          })
+          this.props.options.map(option => (
+            <Option
+              label={ option.label || option.value }
+              key={ option.value || option.label }
+              value={ option.value || option.label }
+              selected={ option.value === value }
+              disabled={ this.props.disabled }
+              updateValue={ this.updateValue }
+            />
+          ))
         }</Control>
       </div>
     )
