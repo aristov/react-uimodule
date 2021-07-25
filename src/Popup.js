@@ -221,20 +221,19 @@ export class Popup extends React.Component
 
   get anchor() {
     let anchor = this.props.anchor
-    let result = anchor
-    if(result) {
+    if(anchor) {
+      // DOM node
+      let result = anchor
       if(isAnchorInterface(result)) {
         return result
       }
-      result = anchor.current?.elem?.current || anchor.current?.elem || anchor.current
+      // Component instance
+      result = anchor.node || anchor.elem?.current
       if(result && isAnchorInterface(result)) {
         return result
       }
-      result = anchor.elem?.current || anchor.elem
-      if(result && isAnchorInterface(result)) {
-        return result
-      }
-      result = anchor.node
+      // Ref object
+      result = anchor.current?.elem?.current || anchor.current
       if(result && isAnchorInterface(result)) {
         return result
       }
