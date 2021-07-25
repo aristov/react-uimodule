@@ -10,11 +10,13 @@ export const CancelContext = React.createContext(() => {})
 
 export class Popup extends React.Component
 {
-  _ref = React.createRef()
+  elem = React.createRef()
 
   _position = [null, null]
 
-  _positionTimeoutId = null
+  _closeTimer = null
+
+  _positionTimer = null
 
   state = {
     hidden : true,
@@ -30,7 +32,8 @@ export class Popup extends React.Component
         className={ ['Popup', props.modal && 'modal'].filter(Boolean).join(' ') }
         aria-hidden={ !props.hidden && !state.hidden? null : props.hidden }
         onKeyDown={ this.onKeyDown }
-        ref={ this._ref }
+        onTransitionEnd={ props.hidden && !state.hidden? this.onTransitionEnd : null }
+        ref={ this.elem }
       >
         <div className="PopupContent">
           <CancelContext.Provider value={ this.props.onCancelEvent }>
@@ -42,6 +45,10 @@ export class Popup extends React.Component
     return props.modal? ReactDOM.createPortal(layout, document.body) : layout
   }
 
+  componentDidMount() {
+    this.props.hidden || this.show()
+  }
+
   componentDidUpdate() {
     if(this.state.hidden) {
       this.props.hidden || this.show()
@@ -49,30 +56,31 @@ export class Popup extends React.Component
     else this.props.hidden && this.close()
   }
 
+  componentWillUnmount() {
+    this.clearHandlers()
+    clearTimeout(this._closeTimer)
+  }
+
   show() {
-    this.updatePosition()
+    this.props.modal || this.setPositionTimeout()
     setImmediate(() => this.setState({ hidden : false }, this.setHandlers))
   }
 
   close() {
-    const node = this.node
-    const handler = node.ontransitionend = () => {
-      if(!this.node) {
-        return
-      }
-      clearTimeout(timeoutId)
-      node.ontransitionend = null
-      this.setState({ hidden : true })
-    }
-    const timeoutId = setTimeout(handler, Math.max(...this.durations))
+    const duration = getMaxTransitionDuration(this.elem.current)
+    this._closeTimer = setTimeout(this.onTransitionEnd, duration)
     this.clearHandlers()
-    if(this.props.modal || node.contains(document.activeElement)) {
+    if(this.props.modal || this.elem.current.contains(document.activeElement)) {
       this.props.anchor?.node?.focus()
     }
   }
 
-  componentWillUnmount() {
-    this.clearHandlers()
+  onTransitionEnd = () => {
+    clearTimeout(this._closeTimer)
+    if(!this.elem.current || this.state.hidden) {
+      return
+    }
+    this.setState({ hidden : true })
   }
 
   setHandlers = () => {
@@ -84,7 +92,6 @@ export class Popup extends React.Component
     }
     document.addEventListener('scroll', this.onDocScroll, true)
     window.addEventListener('resize', this.onWinResize)
-    this.setPositionTimeout()
   }
 
   clearHandlers = () => {
@@ -94,21 +101,19 @@ export class Popup extends React.Component
     if(this.props.modal) {
       return
     }
+    this.clearPositionTimeout()
     document.removeEventListener('scroll', this.onDocScroll, true)
     window.removeEventListener('resize', this.onWinResize)
-    this.clearPositionTimeout()
   }
 
   setPositionTimeout = () => {
-    this._positionTimeoutId = setTimeout(() => {
-      this.updatePosition()
-      this.setPositionTimeout()
-    }, POSITION_UPDATE_INTERVAL)
+    this.updatePosition()
+    this._positionTimer = setTimeout(this.setPositionTimeout, POSITION_UPDATE_INTERVAL)
   }
 
   clearPositionTimeout = () => {
-    clearTimeout(this._positionTimeoutId)
-    this._positionTimeoutId = null
+    clearTimeout(this._positionTimer)
+    this._positionTimer = null
   }
 
   updatePosition = () => {
@@ -117,9 +122,10 @@ export class Popup extends React.Component
     }
     const direction = this.direction
     if(direction === 'none') {
-      return this.setPosition(this._position = [null, null])
+      this.setPosition(this._position = [null, null])
+      return
     }
-    const pRect = this.node.getBoundingClientRect()
+    const pRect = this.elem.current.getBoundingClientRect()
     const aRect = this.props.anchor.node.getBoundingClientRect()
     const { alternatives, fallback } = directions[direction]
     let item, position
@@ -131,18 +137,14 @@ export class Popup extends React.Component
     }
     this.setPosition(position || fallback())
     this._position = [aRect.top, aRect.left]
-    console.log('updatePosition')
   }
-
-  debouncePositionTimeout = debounce(this.setPositionTimeout, POSITION_UPDATE_DEBOUNCE)
 
   /**
    * @param {array} position
    */
   setPosition([top, left]) {
-    const node = this.node
-    const style = node.style
-    const rect = node.getBoundingClientRect()
+    const style = this.elem.current.style
+    const rect = this.elem.current.getBoundingClientRect()
     style.transition = null
     style.top = top === null?
       null :
@@ -164,8 +166,7 @@ export class Popup extends React.Component
     if(this.props.hidden) {
       return
     }
-    const node = this.node
-    if(e.target !== node && node.contains(e.target)) {
+    if(e.target !== this.elem.current && this.elem.current.contains(e.target)) {
       return
     }
     if(this.props.anchor?.node?.contains(e.target)) {
@@ -178,12 +179,11 @@ export class Popup extends React.Component
     if(this.props.hidden) {
       return
     }
-    const node = this.node
-    if(node.contains(e.target) || this.props.anchor?.node?.contains(e.target)) {
+    if(this.elem.current.contains(e.target) || this.props.anchor?.node?.contains(e.target)) {
       return
     }
     const popup = e.target.closest('.Popup')
-    if(popup && popup.classList.contains('modal') && !popup.contains(node)) {
+    if(popup && popup.classList.contains('modal') && !popup.contains(this.elem.current)) {
       return
     }
     this.props.onCancelEvent?.(e)
@@ -200,15 +200,14 @@ export class Popup extends React.Component
   }
 
   onDocScroll = e => {
-    if(this.props.hidden || this.props.modal || !this.props.anchor) {
+    if(this.props.hidden || !this.props.anchor || this.direction === 'none') {
       return
     }
-    const node = this.node
-    if(this.direction === 'none' || !e.target.contains(node)) {
+    if(!e.target.contains(this.elem.current)) {
       return
     }
-    const style = node.style
-    const popup = node.getBoundingClientRect()
+    const style = this.elem.current.style
+    const popup = this.elem.current.getBoundingClientRect()
     const anchor = this.props.anchor.node.getBoundingClientRect()
     const [top, left] = this._position
     style.transition = 'none'
@@ -220,33 +219,29 @@ export class Popup extends React.Component
   }
 
   onWinResize = () => {
+    if(this.props.hidden || !this.props.anchor) {
+      return
+    }
     this.clearPositionTimeout()
     this.debouncePositionTimeout()
   }
 
-  /**
-   * @return {string}
-   */
+  debouncePositionTimeout = debounce(this.setPositionTimeout, POSITION_UPDATE_DEBOUNCE)
+
   get direction() {
     return this.props.anchor? this.props.direction || 'bottom-right' : 'none'
   }
 
-  /**
-   * @returns {number[]}
-   */
-  get durations() {
-    const node = this.node
-    if(!node) {
-      return [0]
-    }
-    const style = getComputedStyle(node)
-    const durations = style.transitionDuration.split(', ')
-    return durations.map(duration => parseFloat(duration) * 1000)
-  }
-
   get node() {
-    return this._ref.current
+    return this.elem.current
   }
+}
+
+function getMaxTransitionDuration(node) {
+  const style = getComputedStyle(node)
+  const items = style.transitionDuration.split(', ')
+  const durations = items.map(duration => parseFloat(duration) * 1000)
+  return Math.max(...durations)
 }
 
 const directions = {
