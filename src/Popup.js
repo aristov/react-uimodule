@@ -76,7 +76,7 @@ export class Popup extends React.Component
     this._closeTimer = setTimeout(this.hide, duration)
     this.clearHandlers()
     if(this.props.modal || this.elem.current.contains(document.activeElement)) {
-      this.props.anchor?.node?.focus()
+      this.anchor?.focus()
     }
   }
 
@@ -121,7 +121,7 @@ export class Popup extends React.Component
 
   updatePosition = () => {
     const node = this.elem.current
-    if(this.props.hidden || !this.props.anchor) {
+    if(this.props.hidden || !this.anchor) {
       node.dataset.direction = 'none'
       return
     }
@@ -132,7 +132,7 @@ export class Popup extends React.Component
       this._position = [style.top = null, style.left = null]
       return
     }
-    const rectA = this.props.anchor.node.getBoundingClientRect()
+    const rectA = this.anchor.getBoundingClientRect()
     const rectP = node.getBoundingClientRect()
     const { alternatives, fallback } = directions[this.props.direction]
     let direction, position
@@ -164,7 +164,7 @@ export class Popup extends React.Component
     if(e.target !== this.elem.current && this.elem.current.contains(e.target)) {
       return
     }
-    if(this.props.anchor?.node?.contains(e.target)) {
+    if(this.anchor?.contains(e.target)) {
       return
     }
     this.props.onCancelEvent?.(e)
@@ -174,7 +174,7 @@ export class Popup extends React.Component
     if(this.props.hidden) {
       return
     }
-    if(this.elem.current.contains(e.target) || this.props.anchor?.node?.contains(e.target)) {
+    if(this.elem.current.contains(e.target) || this.anchor?.contains(e.target)) {
       return
     }
     const popup = e.target.closest('.Popup')
@@ -188,20 +188,20 @@ export class Popup extends React.Component
     if(this.props.hidden || e.code !== 'Escape') {
       return
     }
-    if(e.target === document.body || this.props.anchor?.node?.contains(e.target)) {
+    if(e.target === document.body || this.anchor?.contains(e.target)) {
       e.stopPropagation()
       this.props.onCancelEvent?.(e)
     }
   }
 
   onDocScroll = e => {
-    if(this.props.hidden || !this.props.anchor || this.props.direction === 'none') {
+    if(this.props.hidden || !this.anchor || this.props.direction === 'none') {
       return
     }
     if(!e.target.contains(this.elem.current)) {
       return
     }
-    const rectA = this.props.anchor.node.getBoundingClientRect()
+    const rectA = this.anchor.getBoundingClientRect()
     const rectP = this.elem.current.getBoundingClientRect()
     const [top, left] = this._position
     const style = this.elem.current.style
@@ -213,7 +213,7 @@ export class Popup extends React.Component
   }
 
   onWinResize = () => {
-    if(this.props.hidden || !this.props.anchor) {
+    if(this.props.hidden || !this.anchor) {
       return
     }
     this.updatePositionTick(DEBOUNCE)
@@ -223,9 +223,44 @@ export class Popup extends React.Component
     return this.elem.current
   }
 
+  get anchor() {
+    let anchor = this.props.anchor
+    let result = anchor
+    if(result) {
+      if(isAnchorInterface(result)) {
+        return result
+      }
+      result = anchor.current?.elem?.node || anchor.current?.elem || anchor.current
+      if(result && isAnchorInterface(result)) {
+        return result
+      }
+      result = anchor.elem?.current || anchor.elem
+      if(result && isAnchorInterface(result)) {
+        return result
+      }
+      result = anchor.elem?.node || anchor.elem
+      if(result && isAnchorInterface(result)) {
+        return result
+      }
+      result = anchor.node
+      if(result && isAnchorInterface(result)) {
+        return result
+      }
+    }
+    return null
+  }
+
   static defaultProps = {
     direction : 'bottom-right'
   }
+}
+
+const methods = ['focus', 'contains', 'getBoundingClientRect']
+const isAnchorInterface = anchor => {
+  if(methods.every(name => typeof anchor[name] === 'function')) {
+    return anchor
+  }
+  return null
 }
 
 function getMaxTransitionDuration(node) {
