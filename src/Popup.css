@@ -12,7 +12,7 @@
   outline: none;
   z-index: 100;
 }
-.Popup > .Inner
+.Popup > .PopupContent
 {
   position: relative;
   display: flex;

@@ -31,7 +31,7 @@ export class Popup extends React.Component
         onKeyDown={ this.onKeyDown }
         ref={ this._ref }
       >
-        <div className="Inner">
+        <div className="PopupContent">
           <CancelContext.Provider value={ this.props.onCancelEvent }>
             { props.children }
           </CancelContext.Provider>
