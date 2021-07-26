@@ -10,7 +10,7 @@ const radios = [
 ]
 .map((label, i) => ({ label, value : String(i) }))
 
-export default function ButtonExample() {
+export default function RadioGroupExample() {
   const [value, setValue] = useState(radios[1].value)
   return (
     <Example>

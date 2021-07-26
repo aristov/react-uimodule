@@ -3,7 +3,7 @@ import { Example } from './Example'
 import { Heading } from './Heading'
 import { TextBox } from './TextBox'
 
-export default function ButtonExample() {
+export default function TextBoxExample() {
   const [value, setValue] = useState('Hello React!')
   return (
     <Example>

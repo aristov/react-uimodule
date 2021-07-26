@@ -3,7 +3,7 @@ import { Example } from './Example'
 import { Heading } from './Heading'
 import { CheckBox } from './CheckBox'
 
-export default function ButtonExample() {
+export default function CheckBoxExample() {
   const [checked, setChecked] = useState(true)
   return (
     <Example>
