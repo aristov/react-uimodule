@@ -1,6 +1,7 @@
 import React from 'react'
 import generateId from './generateId'
 import { Button } from './Button'
+import { DialogContext } from './Dialog'
 import './DialogButton.css'
 
 export class DialogButton extends React.Component
@@ -19,6 +20,18 @@ export class DialogButton extends React.Component
   dialogId = generateId()
 
   render() {
+    let dialog
+    if(this.state.rendered) {
+      const props = {
+        id : this.dialogId,
+        hidden : !this.state.expanded,
+        anchor : this.domRef.current,
+        onCancelEvent : this.props.onCancelEvent || this.onCancelEvent,
+      }
+      dialog = this.props.dialog?
+        this.props.dialog(props) :
+        <DialogContext.Provider value={ props }>{ this.props.children }</DialogContext.Provider>
+    }
     return (
       <>
         <Button
@@ -29,16 +42,9 @@ export class DialogButton extends React.Component
           expanded={ this.state.expanded }
           onClick={ this.onClick }
           domRef={ this.domRef }
-          ref ={ this.setRendered }
+          ref={ this.setRendered }
         />
-        {
-          this.state.rendered && this.props.dialog({
-            id : this.dialogId,
-            hidden : !this.state.expanded,
-            anchor : this.domRef.current,
-            onCancelEvent : this.props.onCancelEvent || this.onCancelEvent
-          })
-        }
+        { dialog }
       </>
     )
   }
