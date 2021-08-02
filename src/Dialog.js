@@ -7,38 +7,49 @@ import { Heading } from './Heading'
 import { CancelButton } from './CancelButton'
 import './Dialog.css'
 
+export const DialogContext = React.createContext(null)
+
 export class Dialog extends React.Component
 {
+  static contextType = DialogContext
+
   domRef = React.createRef()
 
   headingId = this.props.title && generateId()
 
+  modal = false
+
+  hidden = true
+
   render() {
+    const props = this.context? Object.assign(this.context, this.props) : this.props
+    this.modal = props.modal
+    this.hidden = props.hidden
     return (
       <Popup
-        modal={ this.props.modal }
-        hidden={ this.props.hidden }
-        anchor={ this.props.anchor }
-        direction={ this.props.direction }
-        onCancelEvent={ this.props.onCancelEvent }
+        modal={ props.modal }
+        hidden={ props.hidden }
+        anchor={ props.anchor }
+        direction={ props.direction }
+        onCancelEvent={ props.onCancelEvent }
       >
         <div
           className="Dialog"
-          id={ this.props.id }
+          id={ props.id }
           role="dialog"
-          aria-modal={ this.props.modal }
-          aria-hidden={ this.props.hidden }
+          aria-modal={ props.modal }
+          aria-hidden={ props.hidden }
           aria-labelledby={ this.headingId }
           onKeyDown={ this.onKeyDown }
           ref={ this.domRef }
         >{
-          !this.props.title? this.props.children : (<>
+          !props.title? props.children : (<>
             <DialogHead>
-              <Heading id={ this.headingId }>{ this.props.title }</Heading>
+              <Heading id={ this.headingId }>{ props.title }</Heading>
               <CancelButton/>
             </DialogHead>
             <DialogBody>
-              { this.props.children }
+              { props.children }
             </DialogBody>
           </>)
         }</div>
@@ -55,7 +66,7 @@ export class Dialog extends React.Component
   }
 
   setFocus() {
-    if(this.props.hidden || !this.props.modal) {
+    if(this.hidden || !this.modal) {
       return
     }
     const node = this.node
@@ -110,7 +121,7 @@ export class Dialog extends React.Component
   }
 
   onKeyDown_Tab(e) {
-    if(!this.props.modal) {
+    if(!this.modal) {
       return
     }
     const nodes = this.getTabSequence()
