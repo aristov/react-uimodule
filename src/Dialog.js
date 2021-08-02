@@ -9,7 +9,7 @@ import './Dialog.css'
 
 export class Dialog extends React.Component
 {
-  elem = React.createRef()
+  domRef = React.createRef()
 
   headingId = this.props.title && generateId()
 
@@ -30,18 +30,17 @@ export class Dialog extends React.Component
           aria-hidden={ this.props.hidden }
           aria-labelledby={ this.headingId }
           onKeyDown={ this.onKeyDown }
-          ref={ this.elem }
+          ref={ this.domRef }
         >{
-          !this.props.title? this.props.children :
-            (<>
-              <DialogHead>
-                <Heading id={ this.headingId }>{ this.props.title }</Heading>
-                <CancelButton/>
-              </DialogHead>
-              <DialogBody>
-                { this.props.children }
-              </DialogBody>
-            </>)
+          !this.props.title? this.props.children : (<>
+            <DialogHead>
+              <Heading id={ this.headingId }>{ this.props.title }</Heading>
+              <CancelButton/>
+            </DialogHead>
+            <DialogBody>
+              { this.props.children }
+            </DialogBody>
+          </>)
         }</div>
       </Popup>
     )
@@ -132,6 +131,6 @@ export class Dialog extends React.Component
   }
 
   get node() {
-    return this.elem.current
+    return this.domRef.current
   }
 }

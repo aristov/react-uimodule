@@ -7,7 +7,7 @@ export class Option extends React.Component
     active : false,
   }
 
-  elem = React.createRef()
+  domRef = React.createRef()
 
   render() {
     return (
@@ -20,7 +20,7 @@ export class Option extends React.Component
         onMouseDown={ this.onMouseDown }
         onMouseLeave={ this.onMouseLeave }
         onMouseUp={ this.onMouseUp }
-        ref={ this.elem }
+        ref={ this.domRef }
       >
         { this.props.label || this.props.children }
       </div>
@@ -50,6 +50,6 @@ export class Option extends React.Component
   }
 
   get node() {
-    return this.elem.current
+    return this.domRef.current
   }
 }

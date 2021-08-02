@@ -11,7 +11,7 @@ export class ListBox extends React.Component
     value : this.props.defaultValue || null,
   }
 
-  elem = React.createRef()
+  domRef = React.createRef()
 
   render() {
     const value = this.props.value ?? this.state.value
@@ -26,7 +26,7 @@ export class ListBox extends React.Component
         onClick={ this.onClick }
         onKeyDown={ this.onKeyDown }
         onKeyUp={ this.onKeyUp }
-        ref={ this.elem }
+        ref={ this.domRef }
       >
         { this.props.label && <Label>{ this.props.label }</Label> }
         <Control>{
@@ -114,6 +114,6 @@ export class ListBox extends React.Component
   }
 
   get node() {
-    return this.elem.current
+    return this.domRef.current
   }
 }

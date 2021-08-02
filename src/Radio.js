@@ -9,7 +9,7 @@ export class Radio extends React.Component
     active : false,
   }
 
-  elem = React.createRef()
+  domRef = React.createRef()
 
   render() {
     const classList = [
@@ -27,7 +27,7 @@ export class Radio extends React.Component
         onMouseDown={ this.onMouseDown }
         onMouseLeave={ this.onMouseLeave }
         onMouseUp={ this.onMouseUp }
-        ref={ this.elem }
+        ref={ this.domRef }
       >
         <Control/>
         { this.props.label && <Label>{ this.props.label }</Label> }
@@ -58,6 +58,6 @@ export class Radio extends React.Component
   }
 
   get node() {
-    return this.elem.current
+    return this.domRef.current
   }
 }

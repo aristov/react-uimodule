@@ -15,10 +15,10 @@ export class SelectBox extends React.Component
     value : this.props.defaultValue || null,
   }
 
-  elem = React.createRef()
+  domRef = React.createRef()
 
   getElem = current => {
-    this.elem.current = current
+    this.domRef.current = current
     this.state.rendered || this.setState({ rendered : true })
   }
 
@@ -162,6 +162,6 @@ export class SelectBox extends React.Component
   }
 
   get node() {
-    return this.elem.current
+    return this.domRef.current
   }
 }

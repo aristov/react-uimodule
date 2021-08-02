@@ -10,7 +10,7 @@ export class CheckBox extends React.Component
     checked : this.props.defaultChecked || false,
   }
 
-  elem = React.createRef()
+  domRef = React.createRef()
 
   render() {
     return (
@@ -27,7 +27,7 @@ export class CheckBox extends React.Component
         onMouseUp={ this.onMouseUp }
         onKeyDown={ this.onKeyDown }
         onKeyUp={ this.onKeyUp }
-        ref={ this.elem }
+        ref={ this.domRef }
       >
         <Control/>
         { this.props.label && <Label>{ this.props.label }</Label> }
@@ -93,10 +93,10 @@ export class CheckBox extends React.Component
 
   onKeyUp_Space() {
     this.setState({ active : false })
-    this.elem.current.click()
+    this.domRef.current.click()
   }
 
   get node() {
-    return this.elem.current
+    return this.domRef.current
   }
 }

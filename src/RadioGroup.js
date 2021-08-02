@@ -10,7 +10,7 @@ export class RadioGroup extends React.Component
     value : this.props.defaultValue || null,
   }
 
-  elem = React.createRef()
+  domRef = React.createRef()
 
   render() {
     const value = this.props.value ?? this.state.value
@@ -22,7 +22,7 @@ export class RadioGroup extends React.Component
         aria-disabled={ this.props.disabled }
         onKeyDown={ this.onKeyDown }
         onKeyUp={ this.onKeyUp }
-        ref={ this.elem }
+        ref={ this.domRef }
       >
         { this.props.label && <Label>{ this.props.label }</Label> }
         {
@@ -110,6 +110,6 @@ export class RadioGroup extends React.Component
   }
 
   get node() {
-    return this.elem.current
+    return this.domRef.current
   }
 }

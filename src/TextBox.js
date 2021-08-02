@@ -9,7 +9,7 @@ export class TextBox extends React.Component
     value : this.props.defaultValue || ''
   }
 
-  elem = React.createRef()
+  domRef = React.createRef()
 
   edit = React.createRef()
 
@@ -20,7 +20,7 @@ export class TextBox extends React.Component
         tabIndex={ this.props.disabled? null : -1 }
         aria-disabled={ this.props.disabled }
         onFocus={ this.onFocus }
-        ref={ this.elem }
+        ref={ this.domRef }
       >
         { this.props.label && <Label>{ this.props.label }</Label> }
         <Control>
@@ -119,7 +119,7 @@ export class TextBox extends React.Component
   }
 
   get node() {
-    return this.elem.current
+    return this.domRef.current
   }
 
   get value() {

@@ -10,11 +10,10 @@ export class DialogButton extends React.Component
     expanded : false,
   }
 
-  elem = React.createRef()
+  domRef = this.props.domRef || React.createRef()
 
-  getElem = current => {
-    this.elem.current = current
-    this.state.rendered || this.setState({ rendered : true })
+  setRendered = button => {
+    !!button === this.state.rendered || this.setState({ rendered : !!button })
   }
 
   dialogId = generateId()
@@ -29,13 +28,14 @@ export class DialogButton extends React.Component
           hasPopup="dialog"
           expanded={ this.state.expanded }
           onClick={ this.onClick }
-          ref={ this.getElem }
+          domRef={ this.domRef }
+          ref ={ this.setRendered }
         />
         {
           this.state.rendered && this.props.dialog({
             id : this.dialogId,
             hidden : !this.state.expanded,
-            anchor : this.node,
+            anchor : this.domRef.current,
             onCancelEvent : this.props.onCancelEvent || this.onCancelEvent
           })
         }
@@ -52,6 +52,6 @@ export class DialogButton extends React.Component
   }
 
   get node() {
-    return this.elem.current?.node
+    return this.domRef.current
   }
 }
