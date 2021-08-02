@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import { Example } from './Example'
 import { Heading } from './Heading'
 import { Button } from './Button'
@@ -6,19 +6,21 @@ import { Popup } from './Popup'
 
 function PopupSimpleExample() {
   const [hidden, setHidden] = useState(true)
-  const [anchor, setAnchor] = useState(null)
-  const getAnchor = useCallback(elem => elem === null || setAnchor(elem), [])
+  const [rendered, setRendered] = useState(false)
+  const ref = useCallback(button => button && setRendered(true), [])
+  const domRef = useRef(null)
   return (
     <>
       <Button
         onClick={ () => setHidden(!hidden) }
-        ref={ getAnchor }
+        ref={ ref }
+        domRef={ domRef }
       >
         Open popup
       </Button>
       <Popup
-        hidden={ !anchor || hidden }
-        anchor={ anchor }
+        hidden={ !rendered || hidden }
+        anchor={ domRef.current }
         onCancelEvent={ () => setHidden(true) }
       >
         <Button onClick={ () => setHidden(true) }>Close the popup</Button>
@@ -29,20 +31,22 @@ function PopupSimpleExample() {
 
 function PopupModalExample() {
   const [expanded, setExpanded] = useState(false)
-  const [anchor, setAnchor] = useState(null)
-  const getAnchor = useCallback(elem => elem === null || setAnchor(elem), [])
+  const [rendered, setRendered] = useState(false)
+  const ref = useCallback(button => button && setRendered(true), [])
+  const domRef = useRef(null)
   return (
     <>
       <Button
         onClick={ () => setExpanded(!expanded) }
-        ref={ getAnchor }
+        ref={ ref }
+        domRef={ domRef }
       >
         Open modal popup
       </Button>
       <Popup
         modal
-        hidden={ !anchor || !expanded }
-        anchor={ anchor }
+        hidden={ !rendered || !expanded }
+        anchor={ domRef.current }
         onCancelEvent={ e => e.type === 'focusin' || setExpanded(false) }
       >
         <Button onClick={ () => setExpanded(false) }>Close the popup</Button>
